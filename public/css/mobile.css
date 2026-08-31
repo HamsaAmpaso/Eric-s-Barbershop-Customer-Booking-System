@@ -1,0 +1,202 @@
+@media (max-width: 768px){
+    .hero-section .header svg{
+        height: 50%;
+    }
+    .nav svg{
+        height: 25px;
+    }
+    .our-story{
+    min-height: 100vh;
+    background-color: var(--off-white);
+    background-image: repeating-linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--gray) 20%, transparent) 0px,
+    color-mix(in srgb, var(--gray) 20%, transparent) 1px,
+    transparent 1px,
+    transparent 150px
+    );
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding-top: 50px;
+    }
+    .our-story .box{
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        gap: 2vw;
+        padding-left: 0px;
+    }
+    .credentials{
+    min-height: 100vh;
+    background-color: var(--off-white);
+    background-image: repeating-linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--gray) 20%, transparent) 0px,
+    color-mix(in srgb, var(--gray) 20%, transparent) 1px,
+    transparent 1px,
+    transparent 150px
+    );
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2vw;
+    padding-left: 0px;
+    text-align: center;
+}
+.our-story .box p{
+    max-width: 460px;
+}
+.credentials .div{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 1vw;
+    padding-right: 0px;
+}
+.credentials .div p{
+    max-width: 400px;
+    text-align: center;
+    margin-left: 0;
+}
+.haircuts{
+    padding-bottom: 50px;
+}
+
+.haircuts .pics{
+    width: 95%;
+    height: auto;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   gap: 1vw;
+}
+.haircuts .pics .container{
+    height: 70vh;
+    width: 80%;
+    border-radius: 5px;
+}
+.haircuts{
+    min-height: 100vh;
+    background-color: var(--off-white);
+    background-image: repeating-linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--gray) 20%, transparent) 0px,
+    color-mix(in srgb, var(--gray) 20%, transparent) 1px,
+    transparent 1px,
+    transparent 150px
+    );
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 2vw;
+    padding-left: 0px;
+    padding-top: 0px;
+    text-align: center;
+}
+
+.top{
+    min-height: 100vh;
+    width: 100%;
+    background-color: var(--black-bg);
+    background-image: repeating-linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--white-big-text-color) 20%, transparent) 0px,
+    color-mix(in srgb, var(--white-big-text-color) 20%, transparent) 1px,
+    transparent 1px,
+    transparent 150px
+    );
+    gap: 2vw;
+}
+
+.top .grid{
+    width: 65vw;
+    height: 36vh;
+    background-color: var(--white-big-text-color);
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    justify-content: center;
+    align-items: center;
+    justify-items: center;
+    align-content: center;  
+}
+footer .bottom{
+    min-height: 100vh;
+    width: 100%;
+    background-color: var(--black-bg);
+    background-image: repeating-linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--white-big-text-color) 20%, transparent) 0px,
+    color-mix(in srgb, var(--white-big-text-color) 20%, transparent) 1px,
+    transparent 1px,
+    transparent 150px
+    );
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    padding-bottom: 10px;
+}
+footer .bottom div{
+    width: 96%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    transform: translateY(-50%);
+
+}
+footer .bottom #uno{
+    width: 33%;
+    position: absolute;
+    transform: rotate(25deg) translate(55%, -113%) ;
+    opacity: 0.9;
+}
+footer .bottom #dos{
+    width: 38%;
+    position: absolute;
+    transform: rotate(-15deg) translate(-65%, -80%) ;
+    opacity: 0.9;
+}
+.input-box{
+    height: 70%;
+    width: 100%;
+    background-color: var(--off-white);
+    position: fixed;
+    bottom: -100;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1vw;
+    z-index: 50;
+    background-image: repeating-linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--gray) 20%, transparent) 0px,
+    color-mix(in srgb, var(--gray) 20%, transparent) 1px,
+    transparent 1px,
+    transparent 150px
+    );
+    gap: 2vw;
+    
+}
+
+
+
+    
+
+
+
+    
+}

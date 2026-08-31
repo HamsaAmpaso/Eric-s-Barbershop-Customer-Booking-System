@@ -1,0 +1,220 @@
+.input-box{
+    height: 60%;
+    width: 100%;
+    background-color: var(--off-white);
+    position: fixed;
+    bottom: -100;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1vw;
+    z-index: 50;
+    background-image: repeating-linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--gray) 20%, transparent) 0px,
+    color-mix(in srgb, var(--gray) 20%, transparent) 1px,
+    transparent 1px,
+    transparent 300px
+    );
+}
+.input-box .error{
+   color: red;
+   text-align: center;
+   font-size: clamp(0.5rem, 1vw, 0.8rem);
+   display: none;
+  
+}
+.input-box .error.errored{
+    display: flex;
+    
+}
+.input-box h2{
+    font-family: var(--font-primary);
+    font-family: var(--font-primary);
+    font-weight: 800;
+    font-size: clamp(1.5rem, 2vw, 2rem);
+    text-shadow: 2px 3px 3px rgb(211, 201, 201);
+}
+.input-box label{
+    font-family: var(--font-primary);
+    font-family: var(--font-primary);
+    font-size: clamp(0.8rem, 1.3vw, 1.3rem);
+    text-shadow: 2px 3px 3px rgb(211, 201, 201);
+    text-align: center;
+    font-weight: 600;
+}
+.input-box input{
+    height: 11%;
+    width: 16%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    border-radius: 3px;
+    box-shadow: 1px 2px 2px rgb(211, 201, 201);
+    text-align: center;
+    background-color: var(--beige);
+    color: var(--off-white);
+    font-size: clamp(0.7rem, 0.9vw, 0.9rem);
+    font-weight: 600;
+    font-family: var(--font-primary);
+    min-width: 200px;
+    min-height: 50px;
+    
+    
+}
+.input-box input:focus{
+    background-color: #c5c7b9;
+}
+.input-box #login-btn{
+    height: 9%;
+    width: 13%;
+    border-radius: 3px;
+    box-shadow: 1px 2px 2px rgb(187, 181, 181);
+    text-align: center;
+    border: 1px solid var(--black);
+    background-color: var(--green);
+    color: var(--off-white);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+     font-size: clamp(0.9rem, 1.2vw, 1.2rem);
+    font-weight: 600;
+    font-family: var(--font-primary);
+    min-width: 170px;
+    min-height: 40px;
+    transition: all 150ms ease-out;
+}
+.input-box #cancel-btn{
+    height: 9%;
+    width: 13%;
+    border-radius: 3px;
+    box-shadow: 1px 2px 2px rgb(211, 201, 201);
+    text-align: center;
+    border: 1px solid var(--black);
+    background-color: var(--off-white);
+    color: var(--black);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: clamp(0.9rem, 1.2vw, 1.2rem);
+    font-weight: 600;
+    font-family: var(--font-primary);
+    min-width: 170px;
+    min-height: 40px;
+    transition: all 150ms ease-out;
+}
+.input-box #login-btn:hover{
+    height: 9%;
+    width: 13%;
+    border-radius: 3px;
+    box-shadow: 1px 2px 2px rgb(187, 181, 181);
+    text-align: center;
+    border: 1px solid var(--black);
+    background-color: var(--black);
+    color: var(--off-white);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+     font-size: clamp(0.9rem, 1.2vw, 1.2rem);
+    font-weight: 600;
+    font-family: var(--font-primary);
+    min-width: 170px;
+    min-height: 40px;
+}
+.input-box #cancel-btn:hover{
+    height: 9%;
+    width: 13%;
+    border-radius: 3px;
+    box-shadow: 1px 2px 2px rgb(211, 201, 201);
+    text-align: center;
+    border: none;
+    background-color: var(--black);
+    color: var(--off-white);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: clamp(0.9rem, 1.2vw, 1.2rem);
+    font-weight: 600;
+    font-family: var(--font-primary);
+    min-width: 170px;
+    min-height: 40px;
+    transition: all 150ms ease-out;
+}
+.input-box #signup-btn{
+    height: 9%;
+    width: 13%;
+    border-radius: 3px;
+    box-shadow: 1px 2px 2px rgb(187, 181, 181);
+    text-align: center;
+    border: 1px solid var(--black);
+    background-color: var(--green);
+    color: var(--off-white);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+     font-size: clamp(0.9rem, 1.2vw, 1.2rem);
+    font-weight: 600;
+    font-family: var(--font-primary);
+    min-width: 170px;
+    min-height: 40px;
+    transition: all 150ms ease-out;
+}
+.input-box #signup-cancel-btn{
+    height: 9%;
+    width: 13%;
+    border-radius: 3px;
+    box-shadow: 1px 2px 2px rgb(211, 201, 201);
+    text-align: center;
+    border: 1px solid var(--black);
+    background-color: var(--off-white);
+    color: var(--black);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: clamp(0.9rem, 1.2vw, 1.2rem);
+    font-weight: 600;
+    font-family: var(--font-primary);
+    min-width: 170px;
+    min-height: 40px;
+    transition: all 150ms ease-out;
+}
+.input-box #signup-btn:hover{
+    height: 9%;
+    width: 13%;
+    border-radius: 3px;
+    box-shadow: 1px 2px 2px rgb(187, 181, 181);
+    text-align: center;
+    border: 1px solid var(--black);
+    background-color: var(--black);
+    color: var(--off-white);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+     font-size: clamp(0.9rem, 1.2vw, 1.2rem);
+    font-weight: 600;
+    font-family: var(--font-primary);
+    min-width: 170px;
+    min-height: 40px;
+}
+.input-box #signup-cancel-btn:hover{
+    height: 9%;
+    width: 13%;
+    border-radius: 3px;
+    box-shadow: 1px 2px 2px rgb(211, 201, 201);
+    text-align: center;
+    border: none;
+    background-color: var(--black);
+    color: var(--off-white);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: clamp(0.9rem, 1.2vw, 1.2rem);
+    font-weight: 600;
+    font-family: var(--font-primary);
+    min-width: 170px;
+    min-height: 40px;
+    transition: all 150ms ease-out;
+}

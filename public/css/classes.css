@@ -1,0 +1,69 @@
+.nav.open{
+    left: 0%;
+}
+.overlay.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+#one.slide{
+    animation-name: slideLeft;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1) ;
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+
+}
+#two.slide{
+    animation-name: slideLeft;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1) ;
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    animation-delay: 0.7s;
+
+}
+#three.slide{
+    animation-name: slideLeft;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1) ;
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    animation-delay: 1.2s;
+
+}
+#first.slide{
+    animation-name: slideLeft;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1) ;
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+
+}
+#second.slide{
+    animation-name: slideLeft;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1) ;
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    animation-delay: 0.7s;
+
+}
+#third.slide{
+    animation-name: slideLeft;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1) ;
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    animation-delay: 1.2s;
+
+}
+.input-box.using{
+    bottom: 0;
+}
+main.logged-in{
+    display: none;
+}
+.user-mode.logged-in{
+    display: flex;
+}

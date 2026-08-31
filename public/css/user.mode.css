@@ -1,0 +1,13 @@
+.user-mode{
+    min-height: 100vh;
+    background-color: var(--black-bg);
+    display: none;
+    background-image: repeating-linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--white-big-text-color) 20%, transparent) 0px,
+    color-mix(in srgb, var(--white-big-text-color) 20%, transparent) 1px,
+    transparent 1px,
+    transparent 300px
+    );
+     
+}

@@ -1,0 +1,48 @@
+{
+  "name": "erics",
+  "version": "1.0.0",
+  "description": "erics is a customer booking system with real time notification system for a family owned barbershop business in bayanan muntinlupa city",
+  "keywords": [
+    "none"
+  ],
+  "homepage": "https://github.com/HamsaAmpaso/Eric-s-Barbershop-Customer-Booking-System#readme",
+  "bugs": {
+    "url": "https://github.com/HamsaAmpaso/Eric-s-Barbershop-Customer-Booking-System/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HamsaAmpaso/Eric-s-Barbershop-Customer-Booking-System.git"
+  },
+  "license": "MIT",
+  "author": "Hamsa Ampaso",
+  "type": "module",
+  "main": "server.ts",
+  "scripts": {
+    "test": "node server.ts"
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0",
+    "pg": "^8.23.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/cookie-parser": "^1.4.10",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^26.4.0",
+    "@types/passport": "^1.0.17",
+    "@types/passport-google-oauth20": "^2.0.17",
+    "@types/pg": "^8.23.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
+  }
+}

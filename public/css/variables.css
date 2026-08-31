@@ -1,0 +1,18 @@
+:root{
+    --off-white: #F5F4F1;
+    --off-white2: #f3f1f1;
+    --gray: #97969A;
+    --green: #758A63;
+    --beige: #DCDDD4;
+    --black: #0A0B0E;
+
+    --black-bg: #0C0B10;
+    --white-big-text-color: #F4F3F0;
+
+    /* Main display font for bold headers */
+    --font-primary: 'Syne', sans-serif;
+  
+  /* Modern geometric body font that pairs cleanly with Syne */
+    --font-secondary: 'Plus Jakarta Sans', sans-serif;
+
+}

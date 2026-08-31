@@ -1,0 +1,53 @@
+.call-to-action{
+    min-height: 100vh;
+    background-image: 
+    linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.45)), 
+    url('../images/barbershop.jpg');
+    
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5vw;
+}
+.call-to-action h2{
+    font-family: var(--font-primary);
+    color: var(--off-white);
+    font-size: clamp(2rem, 4.3vw, 4.3rem);
+    font-weight: 750;
+    letter-spacing: 2px;
+    text-align: center;
+    max-width: 900px;
+}
+.call-to-action button{
+    width: 10%;
+    height: 6%;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--black);
+    font-family: var(--font-primary);
+    font-weight: 750;
+    font-size: clamp(0.7rem, 0.8vw, 0.8rem);
+    min-width: 140px;
+    min-height: 40px;
+    border: none;
+    transition: all 150ms ease-out;
+}
+.call-to-action button:hover{
+    background-color: var(--black);
+    color: var(--off-white);
+    border: 1px solid var(--off-white);
+}
+.call-to-action p{
+    font-family: var(--font-primary);
+    font-size: clamp(0.8rem, 1.3vw, 1.3rem);
+    color: var(--off-white);
+    font-weight: 600;
+    max-width: 500px;
+}
