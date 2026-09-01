@@ -115,11 +115,12 @@
         </div>
 
         <hr />
-        
+
         <div class="div">
           <h3>PRICINGS</h3>
           <p id="address">
-            We offer affordable 120 pesos per cut. You have the freedom to choose the cut that fits your style.
+            We offer affordable 120 pesos per cut. You have the freedom to
+            choose the cut that fits your style.
           </p>
         </div>
         <hr />
@@ -140,58 +141,163 @@
         <button id="call-book-now">BOOK NOW</button>
       </section>
     </main>
-    <div class="user-mode"></div>
+    <div class="user-nav">
+      <svg
+        id="close-nav-user"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 -960 960 960"
+      >
+        <path
+          d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"
+        />
+      </svg>
+      <p id="view-appointments">view Appointments</p>
+      <p id="view-completed">View Completed Appointments</p>
+      <p id="account-details">Account</p>
+      <p id="log-out-btn">Logout</p>
+    </div>
+    <div class="user-mode">
+      <header class="header">
+        <svg
+          id="menu-user"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 -960 960 960"
+        >
+          <path
+            d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"
+          />
+        </svg>
+        <h1>ERIC'S</h1>
+        <p id="user-book-now-btn">BOOK</p>
+      </header>
+      
+
+      <h2>Our Sharp Cuts</h2>
+
+      <section class="haircut-grid">
+        <div class="square">
+          <img src="./images/isa.jpg" alt="" />
+        </div>
+        <div class="square">
+          <img src="./images/dalawa.jpg" alt="" />
+        </div>
+        <div class="square">
+          <img src="./images/tatlo.jpg" alt="" />
+        </div>
+        <div class="square">
+          <img src="./images/apat.jpg" alt="" />
+        </div>
+        <div class="square">
+          <img src="./images/lima.jpg" alt="" />
+        </div>
+        <div class="square">
+          <img src="./images/anim.jpg" alt="" />
+        </div>
+        <div class="square">
+          <img src="./images/pitoo.jpg" alt="" />
+        </div>
+        <div class="square">
+          <img src="./images/walo.jpg" alt="" />
+        </div>
+      </section>
+    </div>
     <footer class="footer">
       <section class="top">
         <p>Get a Fresh Cut!</p>
         <h2>GIVE US</h2>
         <div class="grid">
           <div id="isa" class="small">
-            <img src="./images/isa.jpg" alt="">
+            <img src="./images/isa.jpg" alt="" />
           </div>
           <div id="dalawa" class="small">
-            <img src="./images/dalawa.jpg" alt="">
+            <img src="./images/dalawa.jpg" alt="" />
           </div>
           <div id="tatlo" class="small">
-            <img src="./images/tatlo.jpg" alt="">
+            <img src="./images/tatlo.jpg" alt="" />
           </div>
           <div id="apat" class="small">
-            <img src="./images/apat.jpg" alt="">
+            <img src="./images/apat.jpg" alt="" />
           </div>
           <div id="lima" class="small">
-            <img src="./images/lima.jpg" alt="">
+            <img src="./images/lima.jpg" alt="" />
           </div>
           <div id="anim" class="small">
-            <img src="./images/anim.jpg" alt="">
+            <img src="./images/anim.jpg" alt="" />
           </div>
         </div>
         <h2>A SHOUT</h2>
         <button id="top-book-now">BOOK NOW</button>
       </section>
       <section class="bottom">
-        <img id="uno" src="./images/sticker-removebg-preview.png" alt="">
-        <img id="dos" src="./images/sticker2-removebg-preview.png" alt="">
+        <img id="uno" src="./images/sticker-removebg-preview.png" alt="" />
+        <img id="dos" src="./images/sticker2-removebg-preview.png" alt="" />
         <h1>ERIC'S</h1>
-        <div><p>Eric'sBarbershop@gmail.com</p> <p id="all">All Rights Reserve 2027</p></div>
+        <div>
+          <p>Eric'sBarbershop@gmail.com</p>
+          <p id="all">All Rights Reserve 2027</p>
+        </div>
       </section>
     </footer>
+
     <div id="login-box" class="input-box">
       <h2>Eric's Login</h2>
       <label for="username-input">Email:</label>
       <span id="username-err" class="error"></span>
-      <input placeholder="Enter username" id="username-input" type="text" class="inputs">
+      <input
+        placeholder="Enter username"
+        id="username-input"
+        type="text"
+        class="inputs"
+      />
       <label for="password-input">Password:</label>
       <span id="password-err" class="error"></span>
-      <input placeholder="Enter password" class="inputs" id="password-input" type="password">
+      <input
+        placeholder="Enter password"
+        class="inputs"
+        id="password-input"
+        type="password"
+      />
       <button id="login-btn">Login</button>
       <button id="cancel-btn">Cancel</button>
     </div>
-      <div id="signup-box" class="input-box">
+    <div id="signup-box" class="input-box">
       <h2>Eric's Signup</h2>
-      
-      <label for="password-input-signup">One Step Google Signup</label>
+
+      <label for="password-input-signup">Two Step Google Signup</label>
       <button type="button" id="signup-btn">Google Signup</button>
       <button id="signup-cancel-btn">Cancel</button>
+    </div>
+    <div id="confirm-signup-box" class="input-box">
+      <h2>Eric's Password Confirmation</h2>
+
+      <label for="password-input-signup-confirmation"
+        >Set Account Password:</label
+      >
+      <span class="error" id="password-confirmation-error"></span>
+      <input
+        class="inputs"
+        placeholder="Enter account password"
+        type="password"
+        id="password-input-signup-confirmation"
+      />
+      <button type="button" id="signup-btn-password">Finish Signup</button>
+      <button id="signup-cancel-btn-password">Cancel</button>
+    </div>
+    <div id="confirm-account-error-box" class="error-box">
+      <h2>We couldn't confirm your account at the moment!</h2>
+      <p>
+        Something went wrong during account confirmation. Refresh page and try
+        again.
+      </p>
+      <button class="okay-confirmation-acount">Okay</button>
+    </div>
+    <div id="cancel-confirm-account-error-box" class="error-box">
+      <h2>We couldn't cancel your account confirmation at the moment!</h2>
+      <p>
+        Something went wrong during account confirmation cancelling. Refresh
+        page and try again.
+      </p>
+      <button class="okay-cancel-confirmation-acount">Okay</button>
     </div>
   </body>
 </html>

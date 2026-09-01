@@ -1,3 +1,5 @@
+import { confirmingPasswordAPICaller } from "./api-callers.js";
+import { cancelAccountConfirmationAPICaller } from "./api-callers.js";
 (()=>{
    const userDiv = document.querySelector(".user-mode");
    const menu = document.querySelector("#menu");
@@ -11,6 +13,144 @@
    const first = document.querySelector("#first");
    const second = document.querySelector("#second");
    const third = document.querySelector("#third");
+   const topBookNow = document.querySelector("#top-book-now");
+
+   const confirmSignupBOX = document.querySelector("#confirm-signup-box");
+   const passwordInputConfirmation = document.querySelector("#password-input-signup-confirmation")
+   const confirmingSignupBTN = document.querySelector("#signup-btn-password");
+   const cancelConfirmation = document.querySelector("#signup-cancel-btn-password");
+   const passwordConfirmationError = document.querySelector("#password-confirmation-error");
+
+   const confirmationErrorBox = document.querySelector("#confirm-account-error-box");
+   const closeConfirmationErrorBox = document.querySelector(".okay-confirmation-acount");
+
+   const cancelConfirmationErrorBox = document.querySelector("#cancel-confirm-account-error-box");
+   const closeCancelConfirmationErrorBox = document.querySelector(".okay-cancel-confirmation-acount");
+
+   const userNav = document.querySelector(".user-nav");
+   const viewUserNav = document.querySelector("#menu-user");
+   const closeUserNav = document.querySelector("#close-nav-user");
+
+   closeUserNav.addEventListener("click", ()=>{
+      userNav.classList.remove("using");
+      overlay.classList.remove("active")
+   });
+
+   viewUserNav.addEventListener("click", ()=>{
+      userNav.classList.add("using");
+      overlay.classList.add("active")
+   });
+
+   const status = localStorage.getItem("status");
+   if(status === "account-pending"){
+       confirmSignupBOX.classList.add("using");
+       overlay.classList.add("active");
+   }
+
+   if(status === "logged-in"){
+       userDiv.classList.add("logged-in");
+       main.classList.add("logged-in");
+       topBookNow.classList.add("hide");
+   }
+
+
+
+
+
+   cancelConfirmation.addEventListener("click", async ()=>{
+      try{
+         const data = await cancelAccountConfirmationAPICaller();
+         if(data.success){
+             confirmSignupBOX.classList.remove("using");
+             overlay.classList.remove("active");
+             localStorage.setItem("status", "logged-out");
+             passwordConfirmationError.textContent = "";
+             passwordConfirmationError.classList.remove("errored");
+             passwordInputConfirmation.value ="";
+
+         }else{
+             confirmSignupBOX.classList.remove("using");
+             overlay.classList.remove("active");
+             passwordConfirmationError.textContent = "";
+             passwordConfirmationError.classList.remove("errored");
+             passwordInputConfirmation.value ="";
+             cancelConfirmationErrorBox.classList.add("shown");
+             overlay.classList.add("active");
+             return;
+         }
+      }catch(err){
+        console.log(err);
+         cancelConfirmationErrorBox.classList.add("shown");
+             overlay.classList.add("active");
+      }
+   });
+
+   closeCancelConfirmationErrorBox.addEventListener("click", ()=>{
+       cancelConfirmationErrorBox.classList.remove("shown");
+       overlay.classList.remove("active");
+   });
+
+
+   closeConfirmationErrorBox.addEventListener("click", ()=>{
+      confirmationErrorBox.classList.remove("shown");
+      overlay.classList.remove("active");
+   })
+
+
+
+
+
+   confirmingSignupBTN.addEventListener("click", async ()=>{
+    let hasError = false;
+      if(passwordInputConfirmation.value.trim() === ""){
+          passwordConfirmationError.textContent = "Please type a proper password for your account!";
+          passwordConfirmationError.classList.add("errored");
+          hasError = true;
+      }
+      if(hasError)return;
+      const password = passwordInputConfirmation.value.trim();
+      try{
+         const call = await confirmingPasswordAPICaller(password);
+         if(call.validationError){
+            passwordConfirmationError.textContent = "Please type a proper password for your account must be atleast 8 letters and must be combination of both letters and numbers!";
+            passwordConfirmationError.classList.add("errored");
+            passwordInputConfirmation.value ="";
+            return;
+         }
+         if(!call.success){
+             confirmSignupBOX.classList.remove("using");
+             passwordConfirmationError.textContent = "";
+             passwordConfirmationError.classList.remove("errored");
+             passwordInputConfirmation.value ="";
+            confirmationErrorBox.classList.add("shown");
+            overlay.classList.add("active");
+            return;
+         }
+         main.classList.add("logged-in");
+         localStorage.setItem("status", "logged-in");
+         userDiv.classList.add("logged-in")
+         confirmSignupBOX.classList.remove("using");
+         overlay.classList.remove("active");
+         passwordConfirmationError.textContent = "";
+         passwordConfirmationError.classList.remove("errored");
+         passwordInputConfirmation.value ="";
+         localStorage.setItem("role", call.role);
+         topBookNow.classList.add("hide");
+
+
+
+      }catch(err){
+        console.log(err);
+        confirmationErrorBox.classList.add("shown");
+        overlay.classList.add("active");
+
+      }
+   });
+
+
+
+
+
    const observer = new IntersectionObserver((entries)=>{
        if(entries[0].isIntersecting){
         entries[0].target.classList.add("slide");
@@ -78,7 +218,7 @@
     
     const storyBookBTN = document.querySelector("#story-book-btn");
     const callBookBTN = document.querySelector("#call-book-now");
-    const topBookNow = document.querySelector("#top-book-now");
+    
 
     const signupBtn = document.querySelector("#signup-btn");
 
@@ -103,11 +243,7 @@
     });
 
     confirmSignupBTN.addEventListener("click", ()=>{
-       let hasError = false;
-       
-      
-
-       if(hasError)return;
+    
        
       
         const popup = window.open(
@@ -123,6 +259,7 @@
       
        
     });
+
     window.addEventListener("message", (event) => {
 
     if (event.origin !== "http://localhost:3000") {
@@ -133,11 +270,17 @@
 
         console.log("Google signup successful!");
 
+        confirmSignupBOX.classList.add("using");
+        overlay.classList.add("active");
+        localStorage.setItem("status", "account-pending");
+
+
+
         // Close your signup modal
         
-        main.classList.add("logged-in");
+        /*main.classList.add("logged-in");
         localStorage.setItem("status", "logged-in");
-        userDiv.classList.add("logged-in");
+        userDiv.classList.add("logged-in");*/
 
         // Optional:
         // update UI here
@@ -153,9 +296,9 @@
           loginPasswordErr.classList.remove("errored");
           loginPasswordErr.textContent = "";
           loginUsernameErr.classList.remove("errored");
-       
-          signupPasswordErr.textContent = "";
-          signupPasswordErr.classList.remove("errored");
+          passwordConfirmationError.textContent = "";
+          passwordConfirmationError.classList.remove("errored");
+          
          
         });
     })
@@ -264,6 +407,9 @@
       loginUsernameErr.classList.remove("errored");
       loginPasswordInput.value ="";
       loginUsernameInput.value = "";
+      confirmationErrorBox.classList.remove("shown");
+      cancelConfirmationErrorBox.classList.remove("shown");
+      userNav.classList.remove("using");
       
        
    });

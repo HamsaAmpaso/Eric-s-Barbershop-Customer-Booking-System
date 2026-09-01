@@ -1,5 +1,5 @@
 .user-mode{
-    min-height: 100vh;
+    
     background-color: var(--black-bg);
     display: none;
     background-image: repeating-linear-gradient(
@@ -9,5 +9,108 @@
     transparent 1px,
     transparent 300px
     );
-     
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: auto;
+    padding-top: 70px;
+    gap: 0vw;
+    
+}
+#menu-user{
+    margin-right: auto;
+    margin-left: 2vw;
+}
+#user-book-now-btn{
+    margin-left: auto;
+    margin-right: 2vw;
+    font-size: clamp(0.5rem, 0.8vw, 0.8rem);
+    font-weight: 750;
+    color: var(--gray);
+    font-family: var(--font-primary);
+    transition: all 150ms ease-out;
+}
+.header #user-book-now-btn:hover{
+    color: gray;
+}
+.user-nav{
+    position: fixed;
+    height: 100%;
+    width: 25%;
+    background-color: var(
+    --black-bg);
+    z-index: 10;
+    min-width: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    top: 0;
+    left: -100%;
+    gap: 0.5vw;
+    padding-top: 10px;
+}
+.user-nav svg{
+    fill: var(--gray);
+    height: 35px;
+    margin-left: 1vw;
+    transition: all 150ms ease-out;
+
+}
+.user-nav p{
+    color: var(--gray);
+    font-family: var(--font-primary);
+    font-size: clamp(1rem, 1.4vw, 1.4rem);
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 1em;
+    transition: all 150ms ease-out;
+    max-width: 200px;
+}
+.user-nav p:hover{
+    color: var(--off-white);
+}
+.user-nav svg:hover{
+    fill: var(--off-white);
+}
+.user-mode h2{
+     color: var(--off-white);
+    font-family: var(--font-primary);
+    max-width: 850px;
+    font-size: clamp(1.3rem, 2vw, 2rem);
+    text-align: center;
+    font-weight: 750;
+    letter-spacing: 2px;
+}
+.haircut-grid{
+    min-height: 100vh;
+    width: 95%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-auto-rows: 380px;
+    justify-content: center;
+    align-content: flex-start;
+    justify-items: center;
+    align-items: center;
+    
+}
+.haircut-grid div{
+    height: 95%;
+    width: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.haircut-grid div img{
+    height: 90%;
+    width: 85% ;
+    object-fit: cover;
+    border-radius: 5px;
+    transition: all 150ms ease-out;
+}
+.haircut-grid div img:hover{
+    border-radius: 15% 30% 43% 23% / 33% 23% 28% 12%;
 }

@@ -4,8 +4,17 @@ import dotenv from 'dotenv';
 dotenv.config();
 import type { Request, Response, NextFunction } from "express";
 import { signupService } from "./auth.services.js";
+import { confirmingAccountPasswordController } from "./auth.controllers.js";
+import { asyncControllerHandler } from "../utils/async.handler.js";
+import { validator } from "./auth.validation.js";
+import { userSchema } from "./auth.validation.js";
+import { cancelAccountConfirmationController } from "./auth.controllers.js";
+
+
 const FRONTEND_URL =
     process.env.FRONTEND_URL || "http://127.0.0.1:5500";
+
+
 const getCookieOptions = (req: Request) => {
     const isHTTPS = req.secure;
 
@@ -17,7 +26,10 @@ const getCookieOptions = (req: Request) => {
     };
 };
 
+
 export const authRouter = Router();
+
+
 
 authRouter.get(
   "/signup/google",
@@ -60,11 +72,10 @@ authRouter.get(
       });
     }
    
-    console.log(req.user);
-    console.log(signup);
-    res.cookie("accessToken", signup.accessToken, getCookieOptions(req));
+    
+    res.cookie("username", email, getCookieOptions(req));
 
-    res.cookie("refreshToken", signup.refreshToken, getCookieOptions(req));
+    
     
     return res.send(`
                 <script>
@@ -82,4 +93,7 @@ authRouter.get(
     }
   }
 );
+
+authRouter.post('/password', validator(userSchema), asyncControllerHandler(confirmingAccountPasswordController));
+authRouter.post('/users', asyncControllerHandler(cancelAccountConfirmationController));
 

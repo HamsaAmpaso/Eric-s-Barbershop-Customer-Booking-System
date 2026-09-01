@@ -27,4 +27,59 @@ body{
     flex-direction: column;
     overflow-x: hidden;
 }
+.error-box{
+    height: 60%;
+    width: 30%;
+    border-radius: 5px;
+    box-shadow: 2px 3px 3px var(--black);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    z-index: 55;
+    top: -50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--off-white);
+    gap: 1vw;
+}
+.error-box h2{
+    text-align: center;
+    font-family: var(--font-primary);
+    font-size: clamp(1rem, 1.7vw, 1.7rem);
+    max-width: 450px;
+    text-shadow: 1px 2px 3px rgb(221, 217, 217);
+    color: var(--black);
+}
+.error-box p{
+    text-align: center;
+    font-family: var(--font-secondary);
+    max-width: 400px;
+    text-shadow: 1px 2px 3px rgb(221, 217, 217);
+    color: var(--black);
+    font-size: clamp(0.8rem, 1.2vw, 1.2rem);
 
+}
+.error-box button{
+    background-color: var(--green);
+    color: var(--off-white);
+    border: none;
+    box-shadow: 1px 2px 3px rgb(221, 217, 217);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 8%;
+    width: 35%;
+    font-size: clamp(0.7rem, 1.2vw, 1.2rem);
+    font-family: var(--font-primary);
+    font-weight: 500;
+    border: 1px solid var(--black);
+
+}
+.error-box button:hover{
+    background-color: var(--black);
+}
+.error-box.shown{
+    top: 50%;
+}

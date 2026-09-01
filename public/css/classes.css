@@ -67,3 +67,9 @@ main.logged-in{
 .user-mode.logged-in{
     display: flex;
 }
+#top-book-now.hide{
+    display: none;
+}
+.user-nav.using{
+    left: 0;
+}

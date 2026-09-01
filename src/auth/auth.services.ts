@@ -5,6 +5,9 @@ dotenv.config();
 import { checkIfUserExists } from "./auth.repositories.js";
 import { signupRepository } from './auth.repositories.js';
 import { insertRefreshToken } from './auth.repositories.js';
+import { insertPassword } from './auth.repositories.js';
+import { cancelConfirmationRepository } from './auth.repositories.js';
+import { getUserRole } from './auth.repositories.js';
 type SignupResult = {
     signup: boolean;
     success: boolean;
@@ -36,6 +39,38 @@ type SignupResult = {
             role: user.role,
             iss: "Eric's Barbershop"
         }
+       /* const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_JWT_SECRET!, {
+        expiresIn: '30d'
+        });
+        const hashedRefreshToken = await bcrypt.hash(refreshToken, 12);
+        const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_JWT_SECRET!, {
+        expiresIn: "15m"
+        });
+        await insertRefreshToken(hashedRefreshToken, username);*/
+        return {
+            signup: true,
+            success: true,
+            userAlreadyExists: false,
+            accessToken: null,
+            refreshToken: null,
+            validationError: false,
+            role: user.role
+        };
+
+    }catch(err){
+        console.log(err);
+        throw err;
+    }
+}
+
+export async function accountConfirmationService(username: string, password: string){
+    try{
+        const hashedPassword = await bcrypt.hash(password, 12);
+        const payload = {
+            user: username,
+            role: 'user',
+            iss: "Eric's Barbershop"
+        }
         const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_JWT_SECRET!, {
         expiresIn: '30d'
         });
@@ -44,16 +79,25 @@ type SignupResult = {
         expiresIn: "15m"
         });
         await insertRefreshToken(hashedRefreshToken, username);
+        await insertPassword(username, hashedPassword);
+        const role = await getUserRole(username);
+        console.log(role);
+
         return {
-            signup: true,
             success: true,
-            userAlreadyExists: false,
             accessToken: accessToken,
             refreshToken: refreshToken,
-            validationError: false,
-            role: user.role
-        };
+            role: role.role 
+        }
 
+    }catch(err){
+        console.log(err);
+        throw err;
+    }
+}
+export async function cancelAccountConfirmationService(username: string){
+    try{
+        await cancelConfirmationRepository(username);
     }catch(err){
         console.log(err);
         throw err;

@@ -24,6 +24,7 @@
    text-align: center;
    font-size: clamp(0.5rem, 1vw, 0.8rem);
    display: none;
+   max-width: 400px;
   
 }
 .input-box .error.errored{
@@ -36,6 +37,7 @@
     font-weight: 800;
     font-size: clamp(1.5rem, 2vw, 2rem);
     text-shadow: 2px 3px 3px rgb(211, 201, 201);
+    text-align: center;
 }
 .input-box label{
     font-family: var(--font-primary);
@@ -200,6 +202,83 @@
     min-height: 40px;
 }
 .input-box #signup-cancel-btn:hover{
+    height: 9%;
+    width: 13%;
+    border-radius: 3px;
+    box-shadow: 1px 2px 2px rgb(211, 201, 201);
+    text-align: center;
+    border: none;
+    background-color: var(--black);
+    color: var(--off-white);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: clamp(0.9rem, 1.2vw, 1.2rem);
+    font-weight: 600;
+    font-family: var(--font-primary);
+    min-width: 170px;
+    min-height: 40px;
+    transition: all 150ms ease-out;
+}
+
+
+.input-box #signup-btn-password{
+    height: 9%;
+    width: 13%;
+    border-radius: 3px;
+    box-shadow: 1px 2px 2px rgb(187, 181, 181);
+    text-align: center;
+    border: 1px solid var(--black);
+    background-color: var(--green);
+    color: var(--off-white);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+     font-size: clamp(0.9rem, 1.2vw, 1.2rem);
+    font-weight: 600;
+    font-family: var(--font-primary);
+    min-width: 170px;
+    min-height: 40px;
+    transition: all 150ms ease-out;
+}
+.input-box #signup-cancel-btn-password{
+    height: 9%;
+    width: 13%;
+    border-radius: 3px;
+    box-shadow: 1px 2px 2px rgb(211, 201, 201);
+    text-align: center;
+    border: 1px solid var(--black);
+    background-color: var(--off-white);
+    color: var(--black);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: clamp(0.9rem, 1.2vw, 1.2rem);
+    font-weight: 600;
+    font-family: var(--font-primary);
+    min-width: 170px;
+    min-height: 40px;
+    transition: all 150ms ease-out;
+}
+.input-box #signup-btn-password:hover{
+    height: 9%;
+    width: 13%;
+    border-radius: 3px;
+    box-shadow: 1px 2px 2px rgb(187, 181, 181);
+    text-align: center;
+    border: 1px solid var(--black);
+    background-color: var(--black);
+    color: var(--off-white);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+     font-size: clamp(0.9rem, 1.2vw, 1.2rem);
+    font-weight: 600;
+    font-family: var(--font-primary);
+    min-width: 170px;
+    min-height: 40px;
+}
+.input-box #signup-cancel-btn-password:hover{
     height: 9%;
     width: 13%;
     border-radius: 3px;

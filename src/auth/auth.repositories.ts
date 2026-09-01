@@ -34,3 +34,36 @@ export async function insertRefreshToken(
         throw err;
     }
 }
+export async function insertPassword(username:string, password:string){
+    try{
+       await poolDB.query(`UPDATE users SET password = $2 WHERE username = $1`, [username, password]);
+    }catch(err){
+      console.log(err);
+      throw err;
+    }
+}
+export async function cancelConfirmationRepository(username: string){
+    try{
+        await poolDB.query(`DELETE FROM users WHERE username = $1`, [username]);
+    }catch(err){
+        console.log(err);
+        throw err;
+    }
+}
+export async function getUserRole(username: string){
+    try{
+         const role = await poolDB.query(`SELECT role FROM users WHERE username = $1`, [username]);
+         return role.rows[0];
+    }catch(err){
+        console.log(err);
+        throw err;
+    }
+}
+export async function logoutRepository(username: string){
+    try{
+        await poolDB.query(`UPDATE users SET refreshtoken = NULL WHERE username = $1`,[username]);
+    }catch(err){
+        console.log(err);
+        throw err;
+    }
+}

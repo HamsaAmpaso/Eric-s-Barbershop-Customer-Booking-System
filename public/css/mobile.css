@@ -192,6 +192,33 @@ footer .bottom #dos{
     
 }
 
+.user-mode{
+    min-height: 100vh;
+    background-color: var(--black-bg);
+    display: none;
+    background-image: repeating-linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--white-big-text-color) 20%, transparent) 0px,
+    color-mix(in srgb, var(--white-big-text-color) 20%, transparent) 1px,
+    transparent 1px,
+    transparent 150px
+    );
+    width: 100%;
+     
+}
+
+.haircut-grid{
+    min-height: 100vh;
+    width: 95%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: 250px;
+    justify-content: center;
+    align-content: center;
+    justify-items: center;
+    align-items: center;
+    
+}
 
 
     
