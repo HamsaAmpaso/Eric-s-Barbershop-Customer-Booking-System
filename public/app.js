@@ -1,5 +1,7 @@
 import { confirmingPasswordAPICaller } from "./api-callers.js";
 import { cancelAccountConfirmationAPICaller } from "./api-callers.js";
+import { logoutAPICaller } from "./api-callers.js";
+import { loginAPICaller } from "./api-callers.js";
 (()=>{
    const userDiv = document.querySelector(".user-mode");
    const menu = document.querySelector("#menu");
@@ -30,19 +32,21 @@ import { cancelAccountConfirmationAPICaller } from "./api-callers.js";
    const userNav = document.querySelector(".user-nav");
    const viewUserNav = document.querySelector("#menu-user");
    const closeUserNav = document.querySelector("#close-nav-user");
+   const logoutBTN = document.querySelector("#log-out-btn");
+   const logoutErrorBox = document.querySelector("#logout-error-box");
+   const closeLogoutErrorBox = document.querySelector(".okay-logout");
 
-   closeUserNav.addEventListener("click", ()=>{
-      userNav.classList.remove("using");
-      overlay.classList.remove("active")
-   });
+   const bookAnAppointmentBTN = document.querySelector("#user-book-now-btn");
+   const bookAnppointmentBox = document.querySelector("#book-appointment-input-box");
+   const dayTimeInput = document.querySelector("#day-and-time-input");
+   const dayTimeError = document.querySelector("#day-and-time-error");
+   const noteInput = document.querySelector("#note-input");
+   const noteError = document.querySelector("#note-error");
+   const confirmBookingBTn = document.querySelector("#confirm-booking-btn");
+   const cancelBooking = document.querySelector("#cancel-booking-btn");
+    const status = localStorage.getItem("status");
 
-   viewUserNav.addEventListener("click", ()=>{
-      userNav.classList.add("using");
-      overlay.classList.add("active")
-   });
-
-   const status = localStorage.getItem("status");
-   if(status === "account-pending"){
+    if(status === "account-pending"){
        confirmSignupBOX.classList.add("using");
        overlay.classList.add("active");
    }
@@ -52,6 +56,122 @@ import { cancelAccountConfirmationAPICaller } from "./api-callers.js";
        main.classList.add("logged-in");
        topBookNow.classList.add("hide");
    }
+
+   
+
+
+
+
+
+
+
+
+
+
+
+   confirmBookingBTn.addEventListener("click", async ()=>{
+      try{
+         let hasError = false;
+         if(dayTimeInput.value === ""){
+            dayTimeError.textContent = "Please choose a proper day and tiem for your appointment!";
+            dayTimeError.classList.add("errored");
+            hasError = true;
+         }
+         if(noteInput.value.trim() === ""){
+            noteError.textContent = "Please enter a note if you dont have any note type none!";
+            noteError.classList.add("errored");
+            hasError = true;
+         }
+         if(hasError)return;
+         const dayAndTime = new Date(dayTimeInput.value).toISOString();
+         const note = noteInput.value.trim();
+
+         dayTimeInput.value = "";
+         noteInput.value = "";
+         dayTimeError.textContent = "";
+         noteError.textContent = "";
+         dayTimeError.classList.remove("errored");
+         noteError.classList.remove("errored");
+         bookAnppointmentBox.classList.remove("using");
+         overlay.classList.remove("active");
+
+
+      }catch(err){
+
+      }
+   });
+
+   cancelBooking.addEventListener("click", ()=>{
+      dayTimeInput.value = "";
+      noteInput.value = "";
+      dayTimeError.textContent = "";
+      noteError.textContent = "";
+      dayTimeError.classList.remove("errored");
+      noteError.classList.remove("errored");
+      bookAnppointmentBox.classList.remove("using");
+      overlay.classList.remove("active");
+      
+   });
+
+   bookAnAppointmentBTN.addEventListener("click", ()=>{
+      bookAnppointmentBox.classList.add("using");
+      overlay.classList.add("active");
+   });
+
+   closeLogoutErrorBox.addEventListener("click", ()=>{
+     overlay.classList.remove("active");
+     logoutErrorBox.classList.remove("shown");
+     forceLogout();
+
+   });
+
+
+
+   closeUserNav.addEventListener("click", ()=>{
+      userNav.classList.remove("using");
+      overlay.classList.remove("active");
+   });
+
+   viewUserNav.addEventListener("click", ()=>{
+      userNav.classList.add("using");
+      overlay.classList.add("active");
+   });
+
+  
+
+   function forceLogout(){
+       userDiv.classList.remove("logged-in");
+       main.classList.remove("logged-in");
+       topBookNow.classList.remove("hide");
+       localStorage.setItem("status", "logged-out");
+       localStorage.setItem("role", "none");
+       console.log("force logout!");
+   }
+
+   logoutBTN.addEventListener("click", async ()=>{
+     try{
+       const logout = await logoutAPICaller();
+       if(logout.forceLogout){
+        forceLogout();
+       }
+       if(!logout.success){
+          logoutErrorBox.classList.add("shown");
+          overlay.classList.add("active");
+       }
+       userDiv.classList.remove("logged-in");
+       main.classList.remove("logged-in");
+       topBookNow.classList.remove("hide");
+       localStorage.setItem("status", "logged-out");
+       localStorage.setItem("role", "none");
+       userNav.classList.remove("using");
+       overlay.classList.remove("active");
+     }catch(err){
+
+     }
+   })
+
+
+
 
 
 
@@ -298,12 +418,17 @@ import { cancelAccountConfirmationAPICaller } from "./api-callers.js";
           loginUsernameErr.classList.remove("errored");
           passwordConfirmationError.textContent = "";
           passwordConfirmationError.classList.remove("errored");
+          dayTimeError.textContent = "";
+          noteError.textContent = "";
+          dayTimeError.classList.remove("errored");
+          noteError.classList.remove("errored");
           
          
         });
     })
 
-    confirmLoginBTN.addEventListener("click", ()=>{
+    confirmLoginBTN.addEventListener("click", async ()=>{
+    try{
       let hasError = false;
       if(loginUsernameInput.value.trim() === ""){
         loginUsernameErr.textContent = "Please enter a proper email address!";
@@ -319,14 +444,46 @@ import { cancelAccountConfirmationAPICaller } from "./api-callers.js";
       if(hasError)return;
       const username = loginUsernameInput.value.trim();
       const password = loginPasswordInput.value.trim();
-      loginBox.classList.remove("using");
-      loginUsernameErr.textContent = "";
-      loginPasswordErr.classList.remove("errored");
-      loginPasswordErr.textContent = "";
-      loginUsernameErr.classList.remove("errored");
-      loginPasswordInput.value ="";
-      loginUsernameInput.value = "";
-      overlay.classList.remove("active");
+
+      let hasErrorAgain = false;
+
+      const login = await loginAPICaller(username, password);
+      if(login.userDoesNotExists){
+        loginUsernameErr.textContent = "This user does not exist!";
+        loginUsernameErr.classList.add("errored");
+        loginPasswordInput.value ="";
+        loginUsernameInput.value = "";
+        hasErrorAgain = true;
+      }
+      if(login.wrongPassword){
+        loginPasswordErr.textContent = "Wrong password try again!";
+        loginPasswordErr.classList.add("errored");
+        loginPasswordInput.value ="";
+        hasErrorAgain = true;
+      }
+      if(hasErrorAgain)return;
+
+      if(login.success){
+        loginBox.classList.remove("using");
+        loginUsernameErr.textContent = "";
+        loginPasswordErr.classList.remove("errored");
+        loginPasswordErr.textContent = "";
+        loginUsernameErr.classList.remove("errored");
+        loginPasswordInput.value ="";
+        loginUsernameInput.value = "";
+        overlay.classList.remove("active");
+        userDiv.classList.add("logged-in");
+        main.classList.add("logged-in");
+        topBookNow.classList.add("hide");
+        localStorage.setItem("status", "logged-in");
+        localStorage.setItem("role", login.role);
+      }
+
+
+      
+    }catch(err){
+        console.log(err);
+    }
 
     });
 
@@ -410,6 +567,14 @@ import { cancelAccountConfirmationAPICaller } from "./api-callers.js";
       confirmationErrorBox.classList.remove("shown");
       cancelConfirmationErrorBox.classList.remove("shown");
       userNav.classList.remove("using");
+      logoutErrorBox.classList.remove("shown");
+       bookAnppointmentBox.classList.remove("using");
+        dayTimeInput.value = "";
+         noteInput.value = "";
+         dayTimeError.textContent = "";
+         noteError.textContent = "";
+         dayTimeError.classList.remove("errored");
+         noteError.classList.remove("errored");
       
        
    });

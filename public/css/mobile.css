@@ -206,6 +206,34 @@ footer .bottom #dos{
     width: 100%;
      
 }
+.error-box p{
+    text-align: center;
+    font-family: var(--font-secondary);
+    max-width: 300px;
+    text-shadow: 1px 2px 3px rgb(221, 217, 217);
+    color: var(--black);
+    font-size: clamp(0.7rem, 1.2vw, 1.2rem);
+
+}
+
+.error-box{
+    height: 60%;
+    width: 30%;
+    border-radius: 5px;
+    box-shadow: 2px 3px 3px var(--black);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    z-index: 55;
+    top: -50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--off-white);
+    gap: 2vw;
+    min-width: 350px;
+}
 
 .haircut-grid{
     min-height: 100vh;
@@ -218,6 +246,9 @@ footer .bottom #dos{
     justify-items: center;
     align-items: center;
     
+}
+#book-appointment-input-box h2{
+    font-size: 1.2rem;
 }
 
 

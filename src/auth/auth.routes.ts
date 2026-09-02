@@ -9,7 +9,10 @@ import { asyncControllerHandler } from "../utils/async.handler.js";
 import { validator } from "./auth.validation.js";
 import { userSchema } from "./auth.validation.js";
 import { cancelAccountConfirmationController } from "./auth.controllers.js";
-
+import { authenticationMiddleware } from "./authentication.Middleware.js";
+import { logoutController } from "./auth.controllers.js";
+import { refreshMidlleware } from "./refresh.flow.js";
+import { loginController } from "./auth.controllers.js";
 
 const FRONTEND_URL =
     process.env.FRONTEND_URL || "http://127.0.0.1:5500";
@@ -96,4 +99,7 @@ authRouter.get(
 
 authRouter.post('/password', validator(userSchema), asyncControllerHandler(confirmingAccountPasswordController));
 authRouter.post('/users', asyncControllerHandler(cancelAccountConfirmationController));
+authRouter.post('/logout', authenticationMiddleware, asyncControllerHandler(logoutController));
+authRouter.post('/refresh', refreshMidlleware);
+authRouter.post('/login', asyncControllerHandler(loginController));
 

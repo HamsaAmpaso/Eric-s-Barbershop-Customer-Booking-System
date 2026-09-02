@@ -8,6 +8,8 @@ import { insertRefreshToken } from './auth.repositories.js';
 import { insertPassword } from './auth.repositories.js';
 import { cancelConfirmationRepository } from './auth.repositories.js';
 import { getUserRole } from './auth.repositories.js';
+import { logoutRepository } from './auth.repositories.js';
+import { loginRepository } from './auth.repositories.js';
 type SignupResult = {
     signup: boolean;
     success: boolean;
@@ -76,7 +78,7 @@ export async function accountConfirmationService(username: string, password: str
         });
         const hashedRefreshToken = await bcrypt.hash(refreshToken, 12);
         const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_JWT_SECRET!, {
-        expiresIn: "15m"
+        expiresIn: "1m"
         });
         await insertRefreshToken(hashedRefreshToken, username);
         await insertPassword(username, hashedPassword);
@@ -98,6 +100,68 @@ export async function accountConfirmationService(username: string, password: str
 export async function cancelAccountConfirmationService(username: string){
     try{
         await cancelConfirmationRepository(username);
+    }catch(err){
+        console.log(err);
+        throw err;
+    }
+}
+export async function logoutService(username: string){
+    try{
+        await logoutRepository(username);
+    }catch(err){
+        console.log(err);
+        throw err;
+    }
+}
+
+
+
+export async function loginService(username:string, password:string){
+    try{
+        const user = await loginRepository(username);
+        if(user.rowCount === 0){
+            return{
+               login: false,
+               success: false,
+               userDoesNotExists: true,
+            }
+        }
+        const isMatch = await bcrypt.compare(password, user.rows[0].password);
+
+        if(!isMatch){
+           return{
+               login: false,
+               success: false,
+               wrongPassword: true
+            }
+        }
+
+        const payload = {
+            user: user.rows[0].username,
+            role: user.rows[0].role,
+            iss: "Eric's Barbershop"
+        }
+
+        const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_JWT_SECRET!, {
+            expiresIn: "1m"
+        });
+
+        const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_JWT_SECRET!, {
+            expiresIn: "30d"
+        });
+
+        const hashedRefreshToken = await bcrypt.hash(refreshToken, 12);
+        
+        await insertRefreshToken(hashedRefreshToken, user.rows[0].username);
+
+        return{
+               login: true,
+               success: true,
+               accessToken: accessToken,
+               refreshToken: refreshToken,
+               role: user.rows[0].role
+        }
+
     }catch(err){
         console.log(err);
         throw err;

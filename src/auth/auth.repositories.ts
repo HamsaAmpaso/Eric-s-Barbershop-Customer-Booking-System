@@ -67,3 +67,24 @@ export async function logoutRepository(username: string){
         throw err;
     }
 }
+export async function getRefreshToken(username: string){
+    try{
+        const refreshToken = await poolDB.query(`SELECT refreshtoken FROM users WHERE username = $1`, [username]);
+        return refreshToken.rows[0].refreshtoken;
+    }catch(err){
+        console.log(err);
+        throw err;
+    }
+}
+export async function loginRepository(username:string){
+    try{
+        const user_password = await poolDB.query('SELECT * FROM users WHERE username = $1', [username]);
+        return {
+            rowCount: user_password.rowCount,
+            rows: user_password.rows
+        }
+    }catch(err){
+        console.log(err);
+        throw err;
+    }
+}

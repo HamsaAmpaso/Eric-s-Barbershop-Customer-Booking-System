@@ -43,6 +43,7 @@ body{
     transform: translate(-50%, -50%);
     background-color: var(--off-white);
     gap: 1vw;
+    min-width: 350px;
 }
 .error-box h2{
     text-align: center;
@@ -58,7 +59,7 @@ body{
     max-width: 400px;
     text-shadow: 1px 2px 3px rgb(221, 217, 217);
     color: var(--black);
-    font-size: clamp(0.8rem, 1.2vw, 1.2rem);
+    font-size: clamp(0.7rem, 1.2vw, 1.2rem);
 
 }
 .error-box button{

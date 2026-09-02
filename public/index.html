@@ -153,8 +153,19 @@
       </svg>
       <p id="view-appointments">view Appointments</p>
       <p id="view-completed">View Completed Appointments</p>
-      <p id="account-details">Account</p>
+      
       <p id="log-out-btn">Logout</p>
+    </div>
+    <div id="book-appointment-input-box" class="input-box">
+      <h2>Book an Appointment With Eric's</h2>
+      <label for="day-and-time-input">Day & Time:</label>
+      <span id="day-and-time-error" class="error"></span>
+      <input id="day-and-time-input" type="datetime-local" class="inputs">
+      <label for="note-input">Note:</label>
+      <span id="note-error" class="error"></span>
+      <input placeholder="Leave a note..." id="note-input" class="inputs" type="text">
+      <button id="confirm-booking-btn">Book</button>
+      <button id="cancel-booking-btn">Cancel</button>
     </div>
     <div class="user-mode">
       <header class="header">
@@ -298,6 +309,13 @@
         page and try again.
       </p>
       <button class="okay-cancel-confirmation-acount">Okay</button>
+    </div>
+      <div id="logout-error-box" class="error-box">
+      <h2>We couldn't logout your account at the moment!</h2>
+      <p>
+        Something went wrong during account logout. We logged out your account so you can log in to your account properly.
+      </p>
+      <button class="okay-logout">Okay</button>
     </div>
   </body>
 </html>
