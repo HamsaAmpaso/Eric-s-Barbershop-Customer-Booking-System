@@ -10,6 +10,7 @@
       href="https://fonts.googleapis.com/css2?family=Acme&family=Amatic+SC:wght@400;700&family=Anton&family=Bangers&family=Bebas+Neue&family=Bitcount+Grid+Single:wght@100..900&family=Bitcount+Prop+Double+Ink:wght@100..900&family=Caprasimo&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Just+Another+Hand&family=Manrope:wght@200..800&family=Modak&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@400..800&family=Roboto:ital,wght@0,100..900;1,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&family=Syne:wght@400..800&display=swap"
       rel="stylesheet"
     />
+    <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
     <script type="module" src="app.js" defer></script>
     <link rel="stylesheet" href="./css/base.css" />
     <link rel="stylesheet" href="./css/variables.css" />
@@ -42,6 +43,10 @@
     <link rel="stylesheet" href="./css/mobile.css" />
   </head>
   <body>
+    <div class="notification">
+      <h2>Hey Eric's you have a new customer appointment check it out!</h2>
+      <p id="message"></p>
+    </div>
     <div class="nav">
       <svg
         id="close-nav"
@@ -153,19 +158,72 @@
       </svg>
       <p id="view-appointments">view Appointments</p>
       <p id="view-completed">View Completed Appointments</p>
-      
+
       <p id="log-out-btn">Logout</p>
     </div>
     <div id="book-appointment-input-box" class="input-box">
       <h2>Book an Appointment With Eric's</h2>
       <label for="day-and-time-input">Day & Time:</label>
       <span id="day-and-time-error" class="error"></span>
-      <input id="day-and-time-input" type="datetime-local" class="inputs">
+      <input id="day-and-time-input" type="datetime-local" class="inputs" />
       <label for="note-input">Note:</label>
       <span id="note-error" class="error"></span>
-      <input placeholder="Leave a note..." id="note-input" class="inputs" type="text">
+      <input
+        placeholder="Leave a note..."
+        id="note-input"
+        class="inputs"
+        type="text"
+      />
       <button id="confirm-booking-btn">Book</button>
       <button id="cancel-booking-btn">Cancel</button>
+    </div>
+      <div id="walk-in-appointment-input-box" class="input-box">
+      <h2>Add Walk In Customer</h2>
+      <label for="day-and-time-input-walk-in">Day & Time:</label>
+      <span id="day-and-time-error-walk-in" class="error"></span>
+      <input id="day-and-time-input-walk-in" type="datetime-local" class="inputs" />
+      <button id="confirm-booking-btn-walk-in">Add</button>
+      <button id="cancel-booking-btn-walk-in">Cancel</button>
+    </div>
+    <div class="admin-nav">
+      <svg
+        id="close-nav-admin"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 -960 960 960"
+      >
+        <path
+          d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"
+        />
+      </svg>
+      <p id="dashboard">Dashboard</p>
+      <p id="view-appointments-admin">view Appointments</p>
+      <p id="view-completed-admin">View Completed Appointments</p>
+      <p id="view-all-calcelled-appointments">View Cancelled Appointments</p>
+      <p id="log-out-btn-admin">Logout</p>
+    </div>
+    <div class="admin-mode">
+      <header class="header">
+        <svg
+          id="menu-admin"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 -960 960 960"
+        >
+          <path
+            d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"
+          />
+        </svg>
+        <h1>ERIC'S</h1>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          id="the-add-walk-in"
+          viewBox="0 -960 960 960"
+         
+        >
+          <path
+            d="M160-720v-80h640v80H160Zm0 560v-240h-40v-80l40-200h640l40 200v80h-40v240h-80v-240H560v240H160Zm80-80h240v-160H240v160Zm-38-240h556-556Zm0 0h556l-24-120H226l-24 120Z"
+          />
+        </svg>
+      </header>
     </div>
     <div class="user-mode">
       <header class="header">
@@ -181,7 +239,6 @@
         <h1>ERIC'S</h1>
         <p id="user-book-now-btn">BOOK</p>
       </header>
-      
 
       <h2>Our Sharp Cuts</h2>
 
@@ -310,12 +367,29 @@
       </p>
       <button class="okay-cancel-confirmation-acount">Okay</button>
     </div>
-      <div id="logout-error-box" class="error-box">
+    <div id="logout-error-box" class="error-box">
       <h2>We couldn't logout your account at the moment!</h2>
       <p>
-        Something went wrong during account logout. We logged out your account so you can log in to your account properly.
+        Something went wrong during account logout. We logged out your account
+        so you can log in to your account properly.
       </p>
       <button class="okay-logout">Okay</button>
+    </div>
+     <div id="booking-appointment-error-box" class="error-box">
+      <h2>We couldn't book you an appointment at the moment!</h2>
+      <p>
+        Something went wrong during appointment booking. We advise you to log out your account
+        so you can log in to your account properly.
+      </p>
+      <button class="okay-booking">Okay</button>
+    </div>
+      <div id="pending-appointments-error-box" class="error-box">
+      <h2>We couldn't get pending appointments at the moment!</h2>
+      <p>
+        Something went wrong while fetching pending appointments. We advise you to log out your account
+        so you can log in to your account properly.
+      </p>
+      <button class="okay-pending">Okay</button>
     </div>
   </body>
 </html>

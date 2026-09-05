@@ -47,7 +47,8 @@ export async function refreshMidlleware(req: Request, res: Response, next: NextF
         const payload = {
             user: decodedRefreshToken.user,
             role: decodedRefreshToken.role,
-            iss: "Eric's Barbershop"
+            iss: "Eric's Barbershop",
+            id: decodedRefreshToken.id
 
         };
 

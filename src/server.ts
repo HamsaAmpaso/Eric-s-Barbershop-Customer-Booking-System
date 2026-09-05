@@ -8,9 +8,27 @@ import passport from "passport";
 import "./config/passport.js";
 import { authRouter } from './auth/auth.routes.js';
 import { centralizedErrorMiddleware } from './utils/cenralized.error.middleware.js';
+import { userRoutes } from './user/user.routes.js';
+import { createServer } from "http";
+import { Server } from "socket.io";
+import { adminRoutes } from './admin/admin.routes.js';
+
 
 
 const app = express();
+const httpServer = createServer(app);
+export const io = new Server(httpServer, {
+    cors: {
+        origin: [
+            "http://127.0.0.1:5500",
+            "http://localhost:5500",
+            "http://127.0.0.1:5173",
+            "http://localhost:5173"
+        ],
+        credentials: true
+    }
+});
+
 app.set("trust proxy", 1);
 app.use(express.json());
 app.use(passport.initialize());
@@ -40,22 +58,44 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-app.use(cookieParser());
+
 app.use('/auth', authRouter);
+app.use('/admin', adminRoutes);
+app.use('/user', userRoutes);
 app.use(centralizedErrorMiddleware);
+
+
+io.on("connection", (socket) => {
+
+    console.log("A client connected:", socket.id);
+
+    socket.on("disconnect", () => {
+        console.log("Client disconnected:", socket.id);
+    });
+
+});
+
 
 
 const PORT = process.env.PORT || 3000;
 
-async function startServer(){
-    try{
-       await poolDB.connect();
-       app.listen(PORT, ()=>{
-         console.log("Eric's Barbershop server is running.");
-       });
-    }catch(err){
-       console.log(err);
-       process.exit(1);
+async function startServer() {
+
+    try {
+
+        await poolDB.connect();
+
+        httpServer.listen(PORT, () => {
+            console.log("Eric's Barbershop server is running.");
+        });
+
+    } catch (err) {
+
+        console.log(err);
+        process.exit(1);
+
     }
+
 }
+
 startServer();

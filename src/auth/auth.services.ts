@@ -37,9 +37,10 @@ type SignupResult = {
         
         const user = await signupRepository(username, googleID);
         const payload = {
-            userID: user.user_id,
+            user: user.username,
             role: user.role,
-            iss: "Eric's Barbershop"
+            iss: "Eric's Barbershop",
+            id: user.user_id
         }
        /* const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_JWT_SECRET!, {
         expiresIn: '30d'
@@ -66,12 +67,16 @@ type SignupResult = {
 }
 
 export async function accountConfirmationService(username: string, password: string){
+
     try{
+        const user = await checkIfUserExists(username);
         const hashedPassword = await bcrypt.hash(password, 12);
+         const role = await getUserRole(username);
         const payload = {
             user: username,
             role: 'user',
-            iss: "Eric's Barbershop"
+            iss: "Eric's Barbershop",
+            id: user[0].user_id 
         }
         const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_JWT_SECRET!, {
         expiresIn: '30d'
@@ -82,7 +87,7 @@ export async function accountConfirmationService(username: string, password: str
         });
         await insertRefreshToken(hashedRefreshToken, username);
         await insertPassword(username, hashedPassword);
-        const role = await getUserRole(username);
+       
         console.log(role);
 
         return {
@@ -139,7 +144,8 @@ export async function loginService(username:string, password:string){
         const payload = {
             user: user.rows[0].username,
             role: user.rows[0].role,
-            iss: "Eric's Barbershop"
+            iss: "Eric's Barbershop",
+            id: user.rows[0].user_id
         }
 
         const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_JWT_SECRET!, {

@@ -84,3 +84,46 @@ body{
 .error-box.shown{
     top: 50%;
 }
+.notification{
+    height: 11%;
+    width: 90%;
+    position: fixed;
+    background-color: var(--off-white);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: clamp(1em, 2vw, 2em);
+    gap: 0.5vw;
+    top: 1%;
+    left: 50%;
+    display: none;
+    z-index: 100;
+     background-image: repeating-linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--gray) 20%, transparent) 0px,
+    color-mix(in srgb, var(--gray) 20%, transparent) 1px,
+    transparent 1px,
+    transparent 300px
+    );
+    opacity: 0.7;
+    border-radius: 50px;
+    transform: translateX(-50%);
+
+}
+.notification.go{
+    display: flex;
+}
+.notification h2{
+    color: var(--black);
+    font-family: var(--font-primary);
+    font-size: clamp(0.8rem, 2vw, 2rem);
+    font-weight: 750;
+    letter-spacing: 0.5px;
+}
+.notification p{
+    color: var(--black);
+    font-family: var(--font-secondary);
+    font-size: clamp(0.7rem, 1.2vw, 1.2rem);
+    letter-spacing: 0.5px;
+}

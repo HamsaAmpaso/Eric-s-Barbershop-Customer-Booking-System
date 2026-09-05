@@ -1,0 +1,8 @@
+import express from 'express';
+import { authenticationMiddleware } from '../auth/authentication.Middleware.js';
+import { asyncControllerHandler } from '../utils/async.handler.js';
+import { validator } from '../auth/auth.validation.js';
+import { authorize } from '../auth/authorization.middleware.js';
+import { getAllPendingAppointmentsAdminController } from './admin.controllers.js';
+export const adminRoutes = express.Router();
+adminRoutes.get('/appointments/pending', authenticationMiddleware, authorize("admin"), asyncControllerHandler(getAllPendingAppointmentsAdminController));

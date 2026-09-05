@@ -13,6 +13,7 @@ import { authenticationMiddleware } from "./authentication.Middleware.js";
 import { logoutController } from "./auth.controllers.js";
 import { refreshMidlleware } from "./refresh.flow.js";
 import { loginController } from "./auth.controllers.js";
+import { loginLimiter } from "../utils/rate.limiters.js";
 
 const FRONTEND_URL =
     process.env.FRONTEND_URL || "http://127.0.0.1:5500";
@@ -101,5 +102,5 @@ authRouter.post('/password', validator(userSchema), asyncControllerHandler(confi
 authRouter.post('/users', asyncControllerHandler(cancelAccountConfirmationController));
 authRouter.post('/logout', authenticationMiddleware, asyncControllerHandler(logoutController));
 authRouter.post('/refresh', refreshMidlleware);
-authRouter.post('/login', asyncControllerHandler(loginController));
+authRouter.post('/login', loginLimiter, asyncControllerHandler(loginController));
 

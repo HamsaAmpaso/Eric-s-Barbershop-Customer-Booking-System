@@ -1,0 +1,147 @@
+.admin-mode{
+    
+    background-color: var(--black-bg);
+    display: none;
+    background-image: repeating-linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--white-big-text-color) 20%, transparent) 0px,
+    color-mix(in srgb, var(--white-big-text-color) 20%, transparent) 1px,
+    transparent 1px,
+    transparent 300px
+    );
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+    padding-top: 70px;
+    gap: 0vw;
+    
+}
+#the-add-walk-in{
+      margin: auto;
+    margin-right: 2vw;
+  
+}
+#menu-admin{
+    margin: auto;
+    margin-left: 2vw;
+}
+.admin-nav{
+    position: fixed;
+    height: 100%;
+    width: 25%;
+    background-color: var(
+    --black-bg);
+    z-index: 10;
+    min-width: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    top: 0;
+    left: -100%;
+    gap: 0.5vw;
+    padding-top: 10px;
+}
+.admin-nav svg{
+    fill: var(--gray);
+    height: 35px;
+    margin-left: 1vw;
+    transition: all 150ms ease-out;
+
+}
+.admin-nav p{
+    color: var(--gray);
+    font-family: var(--font-primary);
+    font-size: clamp(1rem, 1.4vw, 1.4rem);
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 1em;
+    transition: all 150ms ease-out;
+    max-width: 300px;
+}
+.admin-nav p:hover{
+    color: var(--off-white);
+}
+.admin-nav svg:hover{
+    fill: var(--off-white);
+}
+.input-box #confirm-booking-btn-walk-in{
+    height: 9%;
+    width: 13%;
+    border-radius: 3px;
+    box-shadow: 1px 2px 2px rgb(187, 181, 181);
+    text-align: center;
+    border: 1px solid var(--black);
+    background-color: var(--green);
+    color: var(--off-white);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+     font-size: clamp(0.9rem, 1.2vw, 1.2rem);
+    font-weight: 600;
+    font-family: var(--font-primary);
+    min-width: 170px;
+    min-height: 40px;
+    transition: all 150ms ease-out;
+}
+.input-box #cancel-booking-btn-walk-in{
+    height: 9%;
+    width: 13%;
+    border-radius: 3px;
+    box-shadow: 1px 2px 2px rgb(211, 201, 201);
+    text-align: center;
+    border: 1px solid var(--black);
+    background-color: var(--off-white);
+    color: var(--black);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: clamp(0.9rem, 1.2vw, 1.2rem);
+    font-weight: 600;
+    font-family: var(--font-primary);
+    min-width: 170px;
+    min-height: 40px;
+    transition: all 150ms ease-out;
+}
+.input-box #confirm-booking-btn-walk-in:hover{
+    height: 9%;
+    width: 13%;
+    border-radius: 3px;
+    box-shadow: 1px 2px 2px rgb(187, 181, 181);
+    text-align: center;
+    border: 1px solid var(--black);
+    background-color: var(--black);
+    color: var(--off-white);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+     font-size: clamp(0.9rem, 1.2vw, 1.2rem);
+    font-weight: 600;
+    font-family: var(--font-primary);
+    min-width: 170px;
+    min-height: 40px;
+}
+.input-box #cancel-booking-btn-walk-in:hover{
+    height: 9%;
+    width: 13%;
+    border-radius: 3px;
+    box-shadow: 1px 2px 2px rgb(211, 201, 201);
+    text-align: center;
+    border: none;
+    background-color: var(--black);
+    color: var(--off-white);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: clamp(0.9rem, 1.2vw, 1.2rem);
+    font-weight: 600;
+    font-family: var(--font-primary);
+    min-width: 170px;
+    min-height: 40px;
+    transition: all 150ms ease-out;
+}

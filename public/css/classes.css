@@ -73,3 +73,9 @@ main.logged-in{
 .user-nav.using{
     left: 0;
 }
+.admin-mode.logged-in{
+    display: flex;
+}
+.admin-nav.using{
+    left: 0;
+}

@@ -4,6 +4,7 @@ export type JwtUser = {
     user: string;
     role: string;
     iss: string;
+    id: string;
 };
 
 declare global {

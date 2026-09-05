@@ -64,6 +64,7 @@
     font-family: var(--font-primary);
     min-width: 200px;
     min-height: 50px;
+    padding: clamp(0.5em, 1vw, 1em);
     
     
 }
