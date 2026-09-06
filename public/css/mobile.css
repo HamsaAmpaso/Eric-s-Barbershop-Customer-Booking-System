@@ -295,6 +295,28 @@ footer .bottom #dos{
     );
 
 }
+.appointments-container .slot{
+    min-height: 60px;
+    width: 95%;
+}
+.appointments-container .slot p{
+    max-width: 80px;
+}
+.appointments-container{
+    gap: 4vw;
+    
+}
+.appointments-container .slot button{
+    width: 70%;
+    height: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--green);
+    border: 1px solid var(--black);
+    transition: all 150ms ease-out;
+    border-radius: 3px;
+}
 
 
     

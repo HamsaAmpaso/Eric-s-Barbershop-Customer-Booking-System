@@ -4,6 +4,8 @@ import { logoutAPICaller } from "./api-callers.js";
 import { loginAPICaller } from "./api-callers.js";
 import { bookAppointmentAPICaller } from "./user-api-callers.js";
 import { getPendingAppointmentsAdminAPICaller } from "./admin-api-callers.js";
+import { markAsDoneAppointmentAPICaller } from "./admin-api-callers.js";
+
 const socket = io("http://localhost:3000");
 (()=>{
    const userDiv = document.querySelector(".user-mode");
@@ -58,6 +60,27 @@ const socket = io("http://localhost:3000");
     const viewAllPedingAppointmentsAdminBTN = document.querySelector("#view-appointments-admin");
     const viewALLPendingAppointmentsErrorBox = document.querySelector("#pending-appointments-error-box");
     const closeViewPEndingAPPOIntmentsErrorBox = document.querySelector(".okay-pending");
+    const markAsDoneApoointmentErrorBox = document.querySelector("#mark-as-done-appointment-error-box");
+    const closeMarkAsDoneAppointmentErrorBox = document.querySelector(".okay-mark-as-done");
+    async function getPendingAppointmentsADMIN(){
+      try{
+         notificationDiv.classList.remove("go");
+         ("active");
+         const appointments = await getPendingAppointmentsAdminAPICaller();
+         if(appointments.forceLogout){
+          forceLogout();
+         }
+         if(!appointments.success){
+          viewALLPendingAppointmentsErrorBox.classList.add("shown");
+          overlay.classList.add("active");
+         }
+         renderPendingAppointments(appointments.datas);
+      }catch(err){
+         console.log(err);
+         viewALLPendingAppointmentsErrorBox.classList.add("shown");
+         overlay.classList.add("active");
+      }
+    }
 
     if(status === "account-pending"){
        confirmSignupBOX.classList.add("using");
@@ -70,24 +93,104 @@ const socket = io("http://localhost:3000");
        topBookNow.classList.add("hide");
    }
    if(status === "logged-in" && role === 'admin'){
+      getPendingAppointmentsADMIN();
        adminDiv.classList.add("logged-in");
        main.classList.add("logged-in");
        topBookNow.classList.add("hide");
        socket.on("new-appointment", (data)=>{
          console.log(data.message);
+         notifSound.play();
          notificationMEssage.textContent = data.message;
          notificationDiv.classList.add("go");
          setTimeout(()=>{
            notificationDiv.classList.remove("go");
          }, 5000);
-         notifSound.play();
+         
+
+         notificationDiv.addEventListener("click", async ()=>{
+         try{
+         notificationDiv.classList.remove("go");
+         ("active");
+         const appointments = await getPendingAppointmentsAdminAPICaller();
+         if(appointments.forceLogout){
+          forceLogout();
+         }
+         if(!appointments.success){
+          viewALLPendingAppointmentsErrorBox.classList.add("shown");
+          overlay.classList.add("active");
+         }
+         renderPendingAppointments(appointments.datas);
+      }catch(err){
+         console.log(err);
+         viewALLPendingAppointmentsErrorBox.classList.add("shown");
+         overlay.classList.add("active");
+      }
+         });
        });
+       
    }
+   const container = document.querySelector(".appointments-container");
+
+   closeMarkAsDoneAppointmentErrorBox.addEventListener("click", ()=>{
+      markAsDoneApoointmentErrorBox.classList.remove("shown");
+      overlay.classList.remove("active");
+   });
+
+   function renderPendingAppointments(arr){
+      container.innerHTML = "";
+      arr.forEach((a)=>{
+         const slot = document.createElement("div");
+         slot.classList.add("slot");
+         container.appendChild(slot);
+         const bookedBy = document.createElement("p");
+         bookedBy.textContent = `Booker: ${a.username.split("@")[0]}`;
+         slot.appendChild(bookedBy);
+         const dayAndTime = document.createElement("p");
+         dayAndTime.textContent = `Time: ${new Date(a.day_time).toLocaleString("en-US", {
+           month: "long",
+           day: "numeric",
+           year: "numeric",
+           hour: "numeric",
+           minute: "2-digit",
+         })}`
+         slot.appendChild(dayAndTime);
+         slot.dataset.note = `Note: ${a.note}.`;
+         const status = document.createElement("p");
+         status.textContent = `Status: ${a.status}` ;
+         slot.appendChild(status);
+         const markAsDoneBTN = document.createElement("button");
+         markAsDoneBTN.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v255l-80 80v-175H200v400h248l80 80H200Zm0-560h560v-80H200v80Zm0 0v-80 80ZM662-60 520-202l56-56 85 85 170-170 56 57L662-60Z"/></svg>`;
+         slot.appendChild(markAsDoneBTN);
+         markAsDoneBTN.dataset.appointment_id = a.appointment_id;
+         markAsDoneBTN.addEventListener("click", async ()=>{
+            try{
+            const markAsDone = await markAsDoneAppointmentAPICaller(a.appointment_id);
+            if(markAsDone.forceLogout){
+               forceLogout();
+            }
+            if(!markAsDone.success){
+               markAsDoneApoointmentErrorBox.classList.add("shown");
+               overlay.classList.add("active");
+            }
+            getPendingAppointmentsADMIN();
+         }catch(err){
+            markAsDoneApoointmentErrorBox.classList.add("shown");
+            overlay.classList.add("active");
+         }
+         });
+         const cancelAppointmentBTN = document.createElement("button");
+         cancelAppointmentBTN.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 -960 960 960" ><path d="m388-212-56-56 92-92-92-92 56-56 92 92 92-92 56 56-92 92 92 92-56 56-92-92-92 92ZM200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Zm0-480h560v-80H200v80Zm0 0v-80 80Z"/></svg>`;
+         slot.appendChild(cancelAppointmentBTN);
+         cancelAppointmentBTN.dataset.appointment_id = a.appointment_id;
+         cancelAppointmentBTN.id = "cancel-appointment";
+      }); }
+
 
    viewAllPedingAppointmentsAdminBTN.addEventListener("click", async () => {
       try{
          adminNav.classList.remove("using");
-         overlay.classList.remove("active");
+         overlay.classList.remove
+         ("active");
          const appointments = await getPendingAppointmentsAdminAPICaller();
          if(appointments.forceLogout){
           forceLogout();
@@ -97,6 +200,7 @@ const socket = io("http://localhost:3000");
           overlay.classList.add("active");
          }
          console.log(appointments.datas);
+         renderPendingAppointments(appointments.datas);
       }catch(err){
          console.log(err);
          viewALLPendingAppointmentsErrorBox.classList.add("shown");
@@ -172,6 +276,7 @@ const socket = io("http://localhost:3000");
 
      adminLogoutBTN.addEventListener("click", async ()=>{
      try{
+       container.innerHTML = "";
        const logout = await logoutAPICaller();
        if(logout.forceLogout){
         forceLogout();
@@ -226,6 +331,12 @@ const socket = io("http://localhost:3000");
             noteError.classList.add("errored");
             hasError = true;
          }
+         if (noteInput.value.trim().length > 30) {
+            noteError.textContent = "Note must not exceed 30 characters!";
+            noteError.classList.add("errored");
+            noteInput.value = "";
+            hasError = true;
+}
          if(hasError)return;
          const dayAndTime = new Date(dayTimeInput.value).toISOString();
          const note = noteInput.value.trim();
@@ -297,12 +408,15 @@ const socket = io("http://localhost:3000");
        userDiv.classList.remove("logged-in");
        main.classList.remove("logged-in");
        topBookNow.classList.remove("hide");
+       container.innerHTML = "";
        localStorage.setItem("status", "logged-out");
        localStorage.setItem("role", "none");
        console.log("force logout!");
+    
    }
 
    logoutBTN.addEventListener("click", async ()=>{
+      
      try{
        const logout = await logoutAPICaller();
        if(logout.forceLogout){
@@ -312,6 +426,7 @@ const socket = io("http://localhost:3000");
           logoutErrorBox.classList.add("shown");
           overlay.classList.add("active");
        }
+       container.innerHTML = "";
        userDiv.classList.remove("logged-in");
        main.classList.remove("logged-in");
        topBookNow.classList.remove("hide");
@@ -319,6 +434,7 @@ const socket = io("http://localhost:3000");
        localStorage.setItem("role", "none");
        userNav.classList.remove("using");
        overlay.classList.remove("active");
+       
      }catch(err){
          logoutErrorBox.classList.add("shown");
         overlay.classList.add("active");
@@ -657,6 +773,21 @@ const socket = io("http://localhost:3000");
             localStorage.setItem("status", "logged-in");
             localStorage.setItem("role", login.role);
             adminDiv.classList.add("logged-in");
+      try{
+         const appointments = await getPendingAppointmentsAdminAPICaller();
+         if(appointments.forceLogout){
+          forceLogout();
+         }
+         if(!appointments.success){
+          viewALLPendingAppointmentsErrorBox.classList.add("shown");
+          overlay.classList.add("active");
+         }
+         renderPendingAppointments(appointments.datas);
+      }catch(err){
+         console.log(err);
+         viewALLPendingAppointmentsErrorBox.classList.add("shown");
+         overlay.classList.add("active");
+      }
         }
       }
 
@@ -764,6 +895,7 @@ const socket = io("http://localhost:3000");
       overlay.classList.remove("active");
        bookingErrorBox.classList.remove("shown");
         viewALLPendingAppointmentsErrorBox.classList.remove("shown");
+        markAsDoneApoointmentErrorBox.classList.remove("shown");
       
        
    });
