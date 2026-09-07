@@ -5,8 +5,57 @@ import { loginAPICaller } from "./api-callers.js";
 import { bookAppointmentAPICaller } from "./user-api-callers.js";
 import { getPendingAppointmentsAdminAPICaller } from "./admin-api-callers.js";
 import { markAsDoneAppointmentAPICaller } from "./admin-api-callers.js";
+import { cancelAppointmentAdminAPICaller } from "./admin-api-callers.js";
+const notifSound = new Audio("./sounds/notification.wav");
 
 const socket = io("http://localhost:3000");
+function establishSocket(){
+    socket.on("connect", () => {
+       console.log("SOCKET CONNECTED:", socket.id);
+
+       const userId = localStorage.getItem("userId");
+
+       console.log("USER ID:", userId);
+
+       if (!userId) {
+        console.log(" No userId in localStorage");
+        return;
+       }
+
+       console.log("Sending register:", userId);
+
+       socket.emit("register", userId);
+       });
+
+      socket.on("notification", (notification) => {
+      notifSound.play();
+      console.log("Notification received!");
+      console.log(notification.message);
+      const div = document.createElement("div");
+      div.classList.add("notification");
+      const parent = document.querySelector(".body");
+      parent.appendChild(div);
+      const h2 = document.createElement("h2");
+      h2.textContent = 'You have a new notification check it out!';
+      div.appendChild(h2);
+      const p = document.createElement("p");
+      p.textContent = notification.message;
+      div.appendChild(p);
+      div.classList.add("go");
+      setTimeout(()=>{
+         div.remove();
+      }, 4000)
+      });
+
+      socket.on("disconnect", (reason) => {
+      console.log("Socket disconnected:", reason);
+      });
+
+      socket.on("connect_error", (error) => {
+      console.log("Socket connection error:", error.message);
+      });
+}
+
 (()=>{
    const userDiv = document.querySelector(".user-mode");
    const menu = document.querySelector("#menu");
@@ -22,6 +71,8 @@ const socket = io("http://localhost:3000");
    const third = document.querySelector("#third");
    const topBookNow = document.querySelector("#top-book-now");
    const adminDiv = document.querySelector(".admin-mode");
+   const cancelAppointmentErrorBox = document.querySelector("#cancel-appointment-error-box");
+   const closeCancelAppointmentErrorBox = document.querySelector(".okay-cancel-appointment");
 
    const confirmSignupBOX = document.querySelector("#confirm-signup-box");
    const passwordInputConfirmation = document.querySelector("#password-input-signup-confirmation")
@@ -56,7 +107,7 @@ const socket = io("http://localhost:3000");
     const closeBookingErrorBox = document.querySelector(".okay-booking");
     const notificationDiv = document.querySelector(".notification");
     const notificationMEssage = document.querySelector("#message");
-    const notifSound = new Audio("./sounds/notification.wav");
+
     const viewAllPedingAppointmentsAdminBTN = document.querySelector("#view-appointments-admin");
     const viewALLPendingAppointmentsErrorBox = document.querySelector("#pending-appointments-error-box");
     const closeViewPEndingAPPOIntmentsErrorBox = document.querySelector(".okay-pending");
@@ -91,6 +142,9 @@ const socket = io("http://localhost:3000");
        userDiv.classList.add("logged-in");
        main.classList.add("logged-in");
        topBookNow.classList.add("hide");
+       establishSocket();
+       
+      
    }
    if(status === "logged-in" && role === 'admin'){
       getPendingAppointmentsADMIN();
@@ -127,6 +181,8 @@ const socket = io("http://localhost:3000");
       }
          });
        });
+
+       establishSocket();
        
    }
    const container = document.querySelector(".appointments-container");
@@ -164,7 +220,7 @@ const socket = io("http://localhost:3000");
          markAsDoneBTN.dataset.appointment_id = a.appointment_id;
          markAsDoneBTN.addEventListener("click", async ()=>{
             try{
-            const markAsDone = await markAsDoneAppointmentAPICaller(a.appointment_id);
+            const markAsDone = await markAsDoneAppointmentAPICaller(a.appointment_id, a.scheduled_by);
             if(markAsDone.forceLogout){
                forceLogout();
             }
@@ -183,7 +239,29 @@ const socket = io("http://localhost:3000");
          slot.appendChild(cancelAppointmentBTN);
          cancelAppointmentBTN.dataset.appointment_id = a.appointment_id;
          cancelAppointmentBTN.id = "cancel-appointment";
+         cancelAppointmentBTN.addEventListener("click", async ()=>{
+            try{
+            const cancelApp = await cancelAppointmentAdminAPICaller(a.appointment_id, a.scheduled_by);
+            if(cancelApp.forceLogout){
+               forceLogout();
+            }
+            if(!cancelApp.success){
+               cancelAppointmentErrorBox.classList.add("shown");
+               overlay.classList.add("active");
+            }
+            getPendingAppointmentsADMIN();
+
+         }catch(err){
+            console.log(err);
+
+         }
+         });
       }); }
+
+      closeCancelAppointmentErrorBox.addEventListener("click", ()=>{
+         cancelAppointmentErrorBox.classList.remove("shown");
+         overlay.classList.remove("active");
+      })
 
 
    viewAllPedingAppointmentsAdminBTN.addEventListener("click", async () => {
@@ -527,6 +605,9 @@ const socket = io("http://localhost:3000");
          passwordInputConfirmation.value ="";
          localStorage.setItem("role", call.role);
          topBookNow.classList.add("hide");
+         localStorage.setItem("userId", call.userId);
+         
+         establishSocket();
 
 
 
@@ -792,6 +873,11 @@ const socket = io("http://localhost:3000");
       }
 
 
+      localStorage.setItem("userId", login.userId);
+      
+      establishSocket();
+
+
       
     }catch(err){
         console.log(err);
@@ -896,6 +982,7 @@ const socket = io("http://localhost:3000");
        bookingErrorBox.classList.remove("shown");
         viewALLPendingAppointmentsErrorBox.classList.remove("shown");
         markAsDoneApoointmentErrorBox.classList.remove("shown");
+        cancelAppointmentErrorBox.classList.remove("shown");
       
        
    });

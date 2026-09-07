@@ -10,6 +10,7 @@ import { cancelConfirmationRepository } from './auth.repositories.js';
 import { getUserRole } from './auth.repositories.js';
 import { logoutRepository } from './auth.repositories.js';
 import { loginRepository } from './auth.repositories.js';
+import { getUserIDRepository } from './auth.repositories.js';
 type SignupResult = {
     signup: boolean;
     success: boolean;
@@ -89,12 +90,17 @@ export async function accountConfirmationService(username: string, password: str
         await insertPassword(username, hashedPassword);
        
         console.log(role);
+        console.log(user[0].user_id );
+        console.log("hey");
+
+        const userId = await getUserIDRepository(username);
 
         return {
             success: true,
             accessToken: accessToken,
             refreshToken: refreshToken,
-            role: role.role 
+            role: role.role ,
+            userId: userId
         }
 
     }catch(err){
@@ -165,7 +171,8 @@ export async function loginService(username:string, password:string){
                success: true,
                accessToken: accessToken,
                refreshToken: refreshToken,
-               role: user.rows[0].role
+               role: user.rows[0].role,
+               userId: user.rows[0].user_id
         }
 
     }catch(err){

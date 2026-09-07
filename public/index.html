@@ -42,7 +42,7 @@
     <link rel="stylesheet" href="./css/animations.css" />
     <link rel="stylesheet" href="./css/mobile.css" />
   </head>
-  <body>
+  <body class="body">
     <div class="notification">
       <h2>Hey Eric's you have a new customer appointment check it out!</h2>
       <p id="message"></p>
@@ -400,6 +400,14 @@
         so you can log in to your account properly.
       </p>
       <button class="okay-mark-as-done">Okay</button>
+    </div>
+    <div id="cancel-appointment-error-box" class="error-box">
+      <h2>We couldn't mark as done this pending appointment at the moment!</h2>
+      <p>
+        Something went wrong while marking pending appointment as done. We advise you to log out your account
+        so you can log in to your account properly.
+      </p>
+      <button class="okay-cancel-appointment">Okay</button>
     </div>
   </body>
 </html>

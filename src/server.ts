@@ -67,17 +67,28 @@ app.use(centralizedErrorMiddleware);
 
 io.on("connection", (socket) => {
 
-    console.log("A client connected:", socket.id);
+    console.log(" USER CONNECTED:", socket.id);
 
-    socket.on("disconnect", () => {
-        console.log("Client disconnected:", socket.id);
+    socket.on("register", (userId) => {
+
+        console.log("REGISTER");
+        console.log("Socket:", socket.id);
+        console.log("User ID:", userId);
+        console.log("Room:", `user:${userId}`);
+
+        socket.join(`user:${userId}`);
+    });
+
+    socket.on("disconnect", (reason) => {
+        console.log(" DISCONNECTED:", socket.id);
+        console.log("Reason:", reason);
     });
 
 });
 
 
 
-const PORT = process.env.PORT || 3000;
+const PORT = Number(process.env.PORT) || 3000;
 
 async function startServer() {
 

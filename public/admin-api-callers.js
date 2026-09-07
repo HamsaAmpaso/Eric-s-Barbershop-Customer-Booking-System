@@ -1,8 +1,10 @@
- const API_URL =
+const API_URL =
     window.location.hostname === "localhost" ||
     window.location.hostname === "127.0.0.1"
         ? "http://localhost:3000"
         : "https://well-spent-5.onrender.com";
+
+
 export async function getPendingAppointmentsAdminAPICaller(){
     try{
         const response = await fetch(`${API_URL}/admin/appointments/pending`, {
@@ -28,6 +30,7 @@ export async function getPendingAppointmentsAdminAPICaller(){
             }
           });
           const data2 = await response2.json();
+          
 
           if(data2.success){
              const response3 = await fetch(`${API_URL}/admin/appointments/pending`, {
@@ -51,7 +54,7 @@ export async function getPendingAppointmentsAdminAPICaller(){
     }
 }
 
-export async function markAsDoneAppointmentAPICaller(appointment_id){
+export async function markAsDoneAppointmentAPICaller(appointment_id, scheduled_by){
   try{
     const response = await fetch(`${API_URL}/admin/appointments/pending`, {
       method: "PATCH",
@@ -60,7 +63,8 @@ export async function markAsDoneAppointmentAPICaller(appointment_id){
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        appointment_id: appointment_id
+        appointment_id: appointment_id,
+        scheduled_by: scheduled_by
       })
     });
      const data = await response.json();
@@ -79,6 +83,7 @@ export async function markAsDoneAppointmentAPICaller(appointment_id){
             }
           });
           const data2 = await response2.json();
+          
 
           if(data2.success){
              const response3 = await fetch(`${API_URL}/admin/appointments/pending`, {
@@ -88,7 +93,8 @@ export async function markAsDoneAppointmentAPICaller(appointment_id){
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        appointment_id: appointment_id
+        appointment_id: appointment_id,
+        scheduled_by: scheduled_by
       })
     });
             const data3 = await response3.json();
@@ -104,4 +110,61 @@ export async function markAsDoneAppointmentAPICaller(appointment_id){
       markAsDone: false
     }
   }
+}
+export async function cancelAppointmentAdminAPICaller(appointment_id, scheduled_by){
+   try{
+     const response = await fetch(`${API_URL}/admin/appointments/pending/cancel`, {
+        method: "PATCH",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          appointment_id: appointment_id,
+          scheduled_by: scheduled_by
+        })
+     });
+     const data = await response.json();
+        if(response.status === 401){
+           return {
+            forceLogout: true
+           }
+       }
+       if(data.tokenExpired){
+          console.log("refreshed");
+          const response2 = await fetch(`${API_URL}/auth/refresh`, {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json"
+            }
+          });
+          const data2 = await response2.json();
+          
+
+          if(data2.success){
+             const response3 = await fetch(`${API_URL}/admin/appointments/pending/cancel`, {
+        method: "PATCH",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          appointment_id: appointment_id,
+          scheduled_by: scheduled_by
+        })
+     });
+            const data3 = await response3.json();
+            return data3;
+          }
+
+       }
+        return data;
+   }catch(err){
+     console.log(err);
+     return {
+       success: false,
+       cancelled: false
+     }
+   }
 }

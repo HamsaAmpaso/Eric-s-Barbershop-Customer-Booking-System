@@ -93,7 +93,7 @@ body{
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
-    padding: clamp(1em, 2vw, 2em);
+    padding: clamp(1em, 2.7vw, 1.7em);
     gap: 0.5vw;
     top: 1%;
     left: 50%;
@@ -106,7 +106,7 @@ body{
     transparent 1px,
     transparent 300px
     );
-    
+    box-shadow: 2px 3px 3px black;
     border-radius: 50px;
     transform: translateX(-50%);
 
@@ -117,13 +117,13 @@ body{
 .notification h2{
     color: var(--black);
     font-family: var(--font-primary);
-    font-size: clamp(0.8rem, 2vw, 2rem);
+    font-size: clamp(0.8rem, 1.7vw, 1.6rem);
     font-weight: 750;
     letter-spacing: 0.5px;
 }
 .notification p{
     color: var(--black);
     font-family: var(--font-secondary);
-    font-size: clamp(0.7rem, 1.2vw, 1.2rem);
+    font-size: clamp(0.8rem, 1vw, 1rem);
     letter-spacing: 0.5px;
 }

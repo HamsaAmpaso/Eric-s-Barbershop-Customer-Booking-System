@@ -6,6 +6,7 @@
     justify-content: flex-start;
     align-items: center;
     gap: 2vw;
+    min-height: 90vh;
 }
 .appointments-container .slot{
     width: 100%;
@@ -19,6 +20,7 @@
     border-radius: 5px;
     padding: clamp(0.5em, 1vw, 1em);
     position: relative;
+    opacity: 0.9;
 
 }
 .appointments-container .slot p{

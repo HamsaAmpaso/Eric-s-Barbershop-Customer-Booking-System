@@ -9,6 +9,15 @@ export async function signupRepository(username: string, googleID: string){
         throw err;
     }
 }
+export async function getUserIDRepository(username:string){
+    try{
+        const userid = await poolDB.query(`SELECT user_id from users WHERE username = $1`, [username]);
+        return userid.rows[0].user_id;
+    }catch(err){
+        console.log(err);
+        throw err;
+    }
+}
 export async function checkIfUserExists(username: string){
     try{
         const users = await poolDB.query('SELECT * FROM users WHERE username = $1', [username]);

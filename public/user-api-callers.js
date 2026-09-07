@@ -1,8 +1,9 @@
- const API_URL =
+const API_URL =
     window.location.hostname === "localhost" ||
     window.location.hostname === "127.0.0.1"
         ? "http://localhost:3000"
         : "https://well-spent-5.onrender.com";
+
 export async function bookAppointmentAPICaller(day_time, note){
     try{
         const response = await fetch(`${API_URL}/user/appointments`, {
@@ -33,6 +34,8 @@ export async function bookAppointmentAPICaller(day_time, note){
             }
           });
           const data2 = await response2.json();
+
+          
 
           if(data2.success){
              const response3 = await fetch(`${API_URL}/user/appointments`, {

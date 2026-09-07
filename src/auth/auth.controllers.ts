@@ -27,7 +27,8 @@ export async function confirmingAccountPasswordController(req: Request, res: Res
         res.status(200).json({
             success: true,
             signup: true,
-            role: signup.role
+            role: signup.role,
+            userId: signup.userId
         });
     }catch(err){
         next(err);
@@ -88,7 +89,8 @@ export async function loginController(req: Request, res: Response, next: NextFun
             success: loggingin.success,
             userDoesNotExists: loggingin.userDoesNotExists,
             wrongPassword: loggingin.wrongPassword,
-            role: loggingin.role
+            role: loggingin.role,
+            userId: loggingin.userId
         }
         res.status(200).json(loggingin2);
 

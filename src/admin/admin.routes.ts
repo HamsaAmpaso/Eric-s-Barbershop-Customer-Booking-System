@@ -5,6 +5,8 @@ import { validator } from '../auth/auth.validation.js';
 import { authorize } from '../auth/authorization.middleware.js';
 import { getAllPendingAppointmentsAdminController } from './admin.controllers.js';
 import { markAsDoneAppointmentController } from './admin.controllers.js';
+import { cancelAppointmentADMINController } from './admin.controllers.js';
 export const adminRoutes = express.Router();
 adminRoutes.get('/appointments/pending', authenticationMiddleware, authorize("admin"), asyncControllerHandler(getAllPendingAppointmentsAdminController));
 adminRoutes.patch('/appointments/pending', authenticationMiddleware, authorize("admin"), asyncControllerHandler(markAsDoneAppointmentController));
+adminRoutes.patch('/appointments/pending/cancel', authenticationMiddleware, authorize("admin"), asyncControllerHandler(cancelAppointmentADMINController));
