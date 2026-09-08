@@ -97,6 +97,9 @@
     align-items: center;
     
 }
+.haircut-grid.hide{
+    display: none;
+}
 .haircut-grid div{
     height: 95%;
     width: 90%;
@@ -113,4 +116,10 @@
 }
 .haircut-grid div img:hover{
     border-radius: 15% 30% 43% 23% / 33% 23% 28% 12%;
+}
+#view-haircuts-user{
+    display: none;
+}
+#view-haircuts-user.show{
+    display: block;
 }

@@ -5,6 +5,9 @@ import { asyncControllerHandler } from '../utils/async.handler.js';
 import { validator } from '../auth/auth.validation.js';
 import { appointmentSchema } from './user.validation.js';
 import { authorize } from '../auth/authorization.middleware.js';
+import { viewUserAppointmentsController } from './user.controllers.js';
+import { cancelAppointmentByUserController } from './user.controllers.js';
 export const userRoutes = express.Router();
 userRoutes.post('/appointments', authenticationMiddleware, authorize("user"), validator(appointmentSchema), asyncControllerHandler(bookAppointmentController) );
-
+userRoutes.get('/appointments/pending', authenticationMiddleware, authorize("user"), asyncControllerHandler(viewUserAppointmentsController));
+userRoutes.patch('/appointments/pending', authenticationMiddleware, authorize("user"), asyncControllerHandler(cancelAppointmentByUserController));

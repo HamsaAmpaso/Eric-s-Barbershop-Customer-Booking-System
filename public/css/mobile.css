@@ -318,6 +318,29 @@ footer .bottom #dos{
     border-radius: 3px;
 }
 
+.appointments-container-user .slot{
+    min-height: 60px;
+    width: 95%;
+}
+.appointments-container-user .slot p{
+    max-width: 80px;
+}
+.appointments-container-user{
+    gap: 4vw;
+    
+}
+.appointments-container-user .slot button{
+    width: 70%;
+    height: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--green);
+    border: 1px solid var(--black);
+    transition: all 150ms ease-out;
+    border-radius: 3px;
+}
+
 
     
 

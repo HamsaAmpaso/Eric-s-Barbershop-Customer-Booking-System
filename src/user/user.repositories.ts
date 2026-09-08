@@ -15,3 +15,20 @@ export async function insertNotificationRepository(triggered_by:string, message:
         throw err;
     }
 }
+export async function viewAllUserPendingAppointments(userId: string){
+    try{
+        const appointments = await poolDB.query(`SELECT appointments.*, users.username FROM appointments JOIN users ON appointments.scheduled_by = users.user_id WHERE scheduled_by = $1 AND status = 'pending'`, [userId]);
+        return appointments.rows;
+    }catch(err){
+        console.log(err);
+        throw err;
+    }
+}
+export async function cancelAppointmentByUserRepository(appointment_id: string, userId: string){
+    try{
+        await poolDB.query(`UPDATE appointments SET status = 'cancelled' WHERE appointment_id = $1 AND scheduled_by = $2`, [appointment_id, userId]);
+    }catch(err){
+        console.log(err);
+        throw err;
+    }
+}

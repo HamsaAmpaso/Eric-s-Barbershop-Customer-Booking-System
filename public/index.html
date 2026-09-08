@@ -44,7 +44,7 @@
   </head>
   <body class="body">
     <div class="notification">
-      <h2>Hey Eric's you have a new customer appointment check it out!</h2>
+      <h2>Hey Eric's you have a new notification check it out!</h2>
       <p id="message"></p>
     </div>
     <div class="nav">
@@ -156,9 +156,9 @@
           d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"
         />
       </svg>
-      <p id="view-appointments">view Appointments</p>
+      <p id="view-appointments">View Pending Appointments</p>
       <p id="view-completed">View Completed Appointments</p>
-
+      <p id="view-haircuts-user">Haircuts</p>
       <p id="log-out-btn">Logout</p>
     </div>
     <div id="book-appointment-input-box" class="input-box">
@@ -242,7 +242,8 @@
         <p id="user-book-now-btn">BOOK</p>
       </header>
 
-      <h2>Our Sharp Cuts</h2>
+      <h2 class="h2-on-user">Our Sharp Cuts</h2>
+      <div class="appointments-container-user"></div>
 
       <section class="haircut-grid">
         <div class="square">
@@ -408,6 +409,22 @@
         so you can log in to your account properly.
       </p>
       <button class="okay-cancel-appointment">Okay</button>
+    </div>
+    <div id="view-user-appointments-error-box" class="error-box">
+      <h2>We couldn't get your pending appointments at the moment!</h2>
+      <p>
+        Something went wrong while getting your pending appointments. We advise you to log out your account
+        so you can log in to your account properly.
+      </p>
+      <button class="okay-user-appointments">Okay</button>
+    </div>
+    <div id="user-cancel-appointment-error-box" class="error-box">
+      <h2>We couldn't cancel your pending appointment at the moment!</h2>
+      <p>
+        Something went wrong while cancelling your pending appointment. We advise you to log out your account
+        so you can log in to your account properly.
+      </p>
+      <button class="okay-user-cancel-appointments">Okay</button>
     </div>
   </body>
 </html>

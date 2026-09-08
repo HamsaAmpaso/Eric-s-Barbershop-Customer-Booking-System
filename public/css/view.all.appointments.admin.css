@@ -14,7 +14,7 @@
     min-height: 90px;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr  70px 70px;
-  justify-items: start;   /* horizontal: START */
+    justify-items: start;   /* horizontal: START */
     align-items: center;
     background-color: var(--off-white);
     border-radius: 5px;

@@ -6,6 +6,8 @@ import { bookAppointmentAPICaller } from "./user-api-callers.js";
 import { getPendingAppointmentsAdminAPICaller } from "./admin-api-callers.js";
 import { markAsDoneAppointmentAPICaller } from "./admin-api-callers.js";
 import { cancelAppointmentAdminAPICaller } from "./admin-api-callers.js";
+import { viewAllUserPendingAppointmentsAPICaller } from "./user-api-callers.js";
+import { cancelAppointmentUserAPICaller } from "./user-api-callers.js";
 const notifSound = new Audio("./sounds/notification.wav");
 
 const socket = io("http://localhost:3000");
@@ -113,10 +115,21 @@ function establishSocket(){
     const closeViewPEndingAPPOIntmentsErrorBox = document.querySelector(".okay-pending");
     const markAsDoneApoointmentErrorBox = document.querySelector("#mark-as-done-appointment-error-box");
     const closeMarkAsDoneAppointmentErrorBox = document.querySelector(".okay-mark-as-done");
+
+   const viewAPPOINTMENTSUSERBTN = document.querySelector("#view-appointments");
+   const viewUserAppointmentsErrorBox = document.querySelector("#view-user-appointments-error-box");
+   const closeViewUserAppointmentsErrorBox = document.querySelector(".okay-user-appointments");
+   const guideText = document.querySelector(".h2-on-user");
+   const hairCutGrid = document.querySelector(".haircut-grid");
+   const userCancelAppointmentErrorBox = document.querySelector("#user-cancel-appointment-error-box");
+   const closeUserCancelAppointmentErrorBox = document.querySelector(".okay-user-cancel-appointments");
+
+   
+
+
     async function getPendingAppointmentsADMIN(){
       try{
-         notificationDiv.classList.remove("go");
-         ("active");
+         
          const appointments = await getPendingAppointmentsAdminAPICaller();
          if(appointments.forceLogout){
           forceLogout();
@@ -159,6 +172,8 @@ function establishSocket(){
          setTimeout(()=>{
            notificationDiv.classList.remove("go");
          }, 5000);
+
+         
          
 
          notificationDiv.addEventListener("click", async ()=>{
@@ -180,15 +195,112 @@ function establishSocket(){
          overlay.classList.add("active");
       }
          });
+
+
+         getPendingAppointmentsADMIN();
+
+         
        });
 
        establishSocket();
        
    }
    const container = document.querySelector(".appointments-container");
+   const containerUser = document.querySelector(".appointments-container-user");
+   const viewHaircutsUser = document.querySelector("#view-haircuts-user");
+   
 
    closeMarkAsDoneAppointmentErrorBox.addEventListener("click", ()=>{
       markAsDoneApoointmentErrorBox.classList.remove("shown");
+      overlay.classList.remove("active");
+   });
+
+   viewHaircutsUser.addEventListener("click", ()=>{
+      userNav.classList.remove("using");
+      overlay.classList.remove("active");
+      containerUser.innerHTML = "";
+      guideText.textContent = `Our Sharp Cuts`;
+      hairCutGrid.classList.remove("hide");
+      containerUser.classList.remove("show");
+      viewHaircutsUser.classList.remove("show");
+   });
+
+   async function getUserAppointments(){
+      try{
+           userNav.classList.remove("using");
+           overlay.classList.remove("active");
+           const appointments = await viewAllUserPendingAppointmentsAPICaller();
+           if(appointments.forceLogout){
+            forceLogout()
+           }
+           if(!appointments.success){
+            viewUserAppointmentsErrorBox.classList.add("shown");
+            overlay.classList.add("active");
+           }
+           console.log(appointments);
+           renderUserPendingAppointments(appointments.datas);
+
+        }catch(err){
+           console.log(err);
+           viewUserAppointmentsErrorBox.classList.add("shown");
+           overlay.classList.add("active");
+        }
+   }
+   
+
+   function renderUserPendingAppointments(arr){
+      containerUser.innerHTML = "";
+      guideText.textContent = `Your Pending Appointments`;
+      hairCutGrid.classList.add("hide");
+      containerUser.classList.add("show");
+      viewHaircutsUser.classList.add("show");
+      arr.forEach((a)=>{
+         const slot = document.createElement("div");
+         slot.classList.add("slot");
+         containerUser.appendChild(slot);
+         const bookedBy = document.createElement("p");
+         bookedBy.textContent = `Booker: ${a.username.split("@")[0]}`;
+         slot.appendChild(bookedBy);
+         const dayAndTime = document.createElement("p");
+         dayAndTime.textContent = `Time: ${new Date(a.day_time).toLocaleString("en-US", {
+           month: "long",
+           day: "numeric",
+           year: "numeric",
+           hour: "numeric",
+           minute: "2-digit",
+         })}`
+         slot.appendChild(dayAndTime);
+         slot.dataset.note = `Note: ${a.note}.`;
+         const status = document.createElement("p");
+         status.textContent = `Status: ${a.status}` ;
+         slot.appendChild(status);
+         const cancelAppointmentBTN = document.createElement("button");
+         cancelAppointmentBTN.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 -960 960 960" ><path d="m388-212-56-56 92-92-92-92 56-56 92 92 92-92 56 56-92 92 92 92-56 56-92-92-92 92ZM200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Zm0-480h560v-80H200v80Zm0 0v-80 80Z"/></svg>`;
+         slot.appendChild(cancelAppointmentBTN);
+         cancelAppointmentBTN.dataset.appointment_id = a.appointment_id;
+         cancelAppointmentBTN.id = "cancel-appointment";
+         cancelAppointmentBTN.addEventListener("click", async ()=>{
+            try{
+               const cancelling = await cancelAppointmentUserAPICaller(a.appointment_id, a.day_time);
+               if(cancelling.forceLogout){
+                  forceLogout();
+               }
+               if(!cancelling.success){
+                   userCancelAppointmentErrorBox.classList.add("shown");
+                   overlay.classList.add("active");
+               }
+               getUserAppointments();
+            }catch(err){
+              console.log(err);
+              userCancelAppointmentErrorBox.classList.add("shown");
+              overlay.classList.add("active");
+            }
+         });
+      
+      });
+   }
+   closeUserCancelAppointmentErrorBox.addEventListener("click", ()=>{
+      userCancelAppointmentErrorBox.classList.remove("shown");
       overlay.classList.remove("active");
    });
 
@@ -257,6 +369,35 @@ function establishSocket(){
          }
          });
       }); }
+
+
+      viewAPPOINTMENTSUSERBTN.addEventListener("click", async ()=>{
+        try{
+           userNav.classList.remove("using");
+           overlay.classList.remove("active");
+           const appointments = await viewAllUserPendingAppointmentsAPICaller();
+           if(appointments.forceLogout){
+            forceLogout()
+           }
+           if(!appointments.success){
+            viewUserAppointmentsErrorBox.classList.add("shown");
+            overlay.classList.add("active");
+           }
+           console.log(appointments);
+           renderUserPendingAppointments(appointments.datas);
+
+        }catch(err){
+           console.log(err);
+           viewUserAppointmentsErrorBox.classList.add("shown");
+           overlay.classList.add("active");
+        }
+      });
+
+
+      closeViewUserAppointmentsErrorBox.addEventListener("click", ()=>{
+         viewUserAppointmentsErrorBox.classList.remove("shown");
+         overlay.classList.remove("active");
+      })
 
       closeCancelAppointmentErrorBox.addEventListener("click", ()=>{
          cancelAppointmentErrorBox.classList.remove("shown");
@@ -983,6 +1124,8 @@ function establishSocket(){
         viewALLPendingAppointmentsErrorBox.classList.remove("shown");
         markAsDoneApoointmentErrorBox.classList.remove("shown");
         cancelAppointmentErrorBox.classList.remove("shown");
+        viewUserAppointmentsErrorBox.classList.remove("shown");
+        userCancelAppointmentErrorBox.classList.remove("shown");
       
        
    });
