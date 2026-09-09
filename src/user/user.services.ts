@@ -3,6 +3,7 @@ import { io } from "../server.js";
 import { insertNotificationRepository } from "./user.repositories.js";
 import { viewAllUserPendingAppointments } from "./user.repositories.js";
 import { cancelAppointmentByUserRepository } from "./user.repositories.js";
+import { viewAllCompletedAppointmentsUserRepository } from "./user.repositories.js";
 export async function bookAppointmentService(scheduled_by: string, day_time: string, note: string, username: string){
     try{
         await bookAppointmentRepository(scheduled_by, day_time, note);
@@ -60,6 +61,15 @@ export async function cancelAppointmentByUserService(appointment_id: string, use
         minute: "2-digit",
         })}`);
 
+    }catch(err){
+        console.log(err);
+        throw err;
+    }
+}
+export async function viewAllCompletedAppointmentsUserService(userId: string){
+    try{
+        const appointments = await viewAllCompletedAppointmentsUserRepository(userId);
+        return appointments;
     }catch(err){
         console.log(err);
         throw err;

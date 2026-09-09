@@ -42,3 +42,21 @@ export async function cancelAppointmentAdminRepository(appointment_id: string){
         throw err;
     }
 }
+export async function getAllCompletedTasksADMINSIDERepository(){
+    try{
+        const appointments = await poolDB.query(`SELECT appointments.*, users.username FROM appointments JOIN users ON appointments.scheduled_by = users.user_id WHERE status = 'completed' ORDER BY day_time ASC`);
+        return appointments.rows;
+    }catch(err){
+        console.log(err);
+        throw err;
+    }
+}
+export async function viewCancelledAppointmentsRepository(){
+    try{
+        const appointments = await poolDB.query(`SELECT appointments.*, users.username FROM appointments JOIN users ON appointments.scheduled_by = users.user_id WHERE status = 'cancelled' ORDER BY day_time ASC`);
+        return appointments.rows;
+    }catch(err){
+        console.log(err);
+        throw err;
+    }
+}

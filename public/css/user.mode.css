@@ -80,7 +80,7 @@
      color: var(--off-white);
     font-family: var(--font-primary);
     max-width: 850px;
-    font-size: clamp(1.3rem, 2vw, 2rem);
+    font-size: clamp(1.1rem, 2vw, 2rem);
     text-align: center;
     font-weight: 750;
     letter-spacing: 2px;

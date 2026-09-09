@@ -32,3 +32,12 @@ export async function cancelAppointmentByUserRepository(appointment_id: string, 
         throw err;
     }
 }
+export async function viewAllCompletedAppointmentsUserRepository(userId: string){
+    try{
+        const appointments = await poolDB.query(`SELECT appointments.*, users.username FROM appointments JOIN users ON appointments.scheduled_by = users.user_id WHERE scheduled_by = $1 AND status = 'completed'`,[userId]);
+        return appointments.rows;
+    }catch(err){
+        console.log(err);
+        throw err;
+    }
+}

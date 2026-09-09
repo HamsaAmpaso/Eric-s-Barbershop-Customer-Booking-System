@@ -3,6 +3,8 @@ import { markAsDoneAppointment } from "./admin.repositories.js";
 import { insertUserADMINNotificationRepository } from "./admin.repositories.js";
 import { getAppointmentTime } from "./admin.repositories.js";
 import { cancelAppointmentAdminRepository } from "./admin.repositories.js";
+import { getAllCompletedTasksADMINSIDERepository } from "./admin.repositories.js";
+import { viewCancelledAppointmentsRepository } from "./admin.repositories.js";
 import { io } from "../server.js";
 export async function getAllPendingAppointmentsAdminService(){
     try{
@@ -56,4 +58,22 @@ export async function cancelAppointmentService(appointment_id: string, userId: s
      console.log(err);
      throw err;
    }
+}
+export async function getAllCompletedAppointmentsADMINSIDEService(){
+    try{
+        const appointments = await getAllCompletedTasksADMINSIDERepository();
+        return appointments;
+    }catch(err){
+        console.log(err);
+        throw err;
+    }
+}
+export async function viewCancelledAppointmentsService(){
+    try{
+        const appointments = await viewCancelledAppointmentsRepository();
+        return appointments;
+    }catch(err){
+        console.log(err);
+        throw err;
+    }
 }

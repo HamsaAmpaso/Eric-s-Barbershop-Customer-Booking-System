@@ -8,7 +8,12 @@ import { markAsDoneAppointmentAPICaller } from "./admin-api-callers.js";
 import { cancelAppointmentAdminAPICaller } from "./admin-api-callers.js";
 import { viewAllUserPendingAppointmentsAPICaller } from "./user-api-callers.js";
 import { cancelAppointmentUserAPICaller } from "./user-api-callers.js";
+import { viewAllCompletedAppointmentsUserAPICaller } from "./user-api-callers.js";
+import { getCompletedAppointmentsADMINSIDEAPICaller } from "./admin-api-callers.js";
+import { viewCancelledAppointmentsAPICaller } from "./admin-api-callers.js";
 const notifSound = new Audio("./sounds/notification.wav");
+
+
 
 const socket = io("http://localhost:3000");
 function establishSocket(){
@@ -44,9 +49,14 @@ function establishSocket(){
       p.textContent = notification.message;
       div.appendChild(p);
       div.classList.add("go");
+      
       setTimeout(()=>{
          div.remove();
-      }, 4000)
+      }, 4000);
+
+      getUserAppointments();
+
+      
       });
 
       socket.on("disconnect", (reason) => {
@@ -58,7 +68,7 @@ function establishSocket(){
       });
 }
 
-(()=>{
+
    const userDiv = document.querySelector(".user-mode");
    const menu = document.querySelector("#menu");
    const main = document.querySelector(".main");
@@ -123,28 +133,15 @@ function establishSocket(){
    const hairCutGrid = document.querySelector(".haircut-grid");
    const userCancelAppointmentErrorBox = document.querySelector("#user-cancel-appointment-error-box");
    const closeUserCancelAppointmentErrorBox = document.querySelector(".okay-user-cancel-appointments");
-
-   
-
-
-    async function getPendingAppointmentsADMIN(){
-      try{
-         
-         const appointments = await getPendingAppointmentsAdminAPICaller();
-         if(appointments.forceLogout){
-          forceLogout();
-         }
-         if(!appointments.success){
-          viewALLPendingAppointmentsErrorBox.classList.add("shown");
-          overlay.classList.add("active");
-         }
-         renderPendingAppointments(appointments.datas);
-      }catch(err){
-         console.log(err);
-         viewALLPendingAppointmentsErrorBox.classList.add("shown");
-         overlay.classList.add("active");
-      }
-    }
+   const viewCompletedUserAppointmentsBTN = document.querySelector("#view-completed");
+   const viewCompletedAppointmentsErrorBox = document.querySelector("#user-completed-appointment-error-box");
+   const closeViewCompletedAppointmentsErrorBox = document.querySelector(".okay-user-completed-appointments");
+   const viewCompletedAppointmentsADMINACTIONBTN = document.querySelector("#view-completed-admin");
+   const viewCompletedAppointmentsADMINERRORBOX = document.querySelector("#admin-completed-appointment-error-box");
+   const closeViewCompletedADMINErroBOx = document.querySelector(".okay-admin-completed-appointments");
+   const viewAllCancelledAppointments = document.querySelector("#view-all-calcelled-appointments");
+   const viewCancelledAppointmentsErrorBox = document.querySelector("#admin-cancelled-view-appointment-error-box");
+   const closeViewCancelledAppointmentsErrorBox = document.querySelector(".okay-admin-cancelled-view-appointments");
 
     if(status === "account-pending"){
        confirmSignupBOX.classList.add("using");
@@ -187,12 +184,14 @@ function establishSocket(){
          if(!appointments.success){
           viewALLPendingAppointmentsErrorBox.classList.add("shown");
           overlay.classList.add("active");
+          return;
          }
          renderPendingAppointments(appointments.datas);
       }catch(err){
          console.log(err);
          viewALLPendingAppointmentsErrorBox.classList.add("shown");
          overlay.classList.add("active");
+         return;
       }
          });
 
@@ -205,6 +204,211 @@ function establishSocket(){
        establishSocket();
        
    }
+
+   closeViewCancelledAppointmentsErrorBox.addEventListener("click", ()=>{
+      viewCancelledAppointmentsErrorBox.classList.remove("shown");
+       overlay.classList.remove("active");
+   });
+
+   viewAllCancelledAppointments.addEventListener("click", async ()=>{
+      adminNav.classList.remove("using");
+      overlay.classList.remove("active");
+      try{
+         const appointments = await viewCancelledAppointmentsAPICaller();
+         if(appointments.forceLogout){
+            forceLogout();
+         }
+         if(!appointments.success){
+            viewCancelledAppointmentsErrorBox.classList.add("shown");
+            overlay.classList.add("active");
+            return;
+         }
+         console.log(appointments.datas)
+
+         renderCancelledAppointments(appointments.datas);
+      }catch(err){
+            console.log(err);
+            viewCancelledAppointmentsErrorBox.classList.add("shown");
+            overlay.classList.add("active");
+      }
+   });
+
+    function renderCancelledAppointments(arr){
+      container.innerHTML = "";
+      const guide = document.createElement("h2");
+      guide.textContent = `Cancelled Appointments`;
+      container.appendChild(guide);
+      arr.forEach((a)=>{
+         const slot = document.createElement("div");
+         slot.classList.add("slot");
+         slot.classList.add("completed");
+         container.appendChild(slot);
+         const bookedBy = document.createElement("p");
+         bookedBy.textContent = `Booker: ${a.username.split("@")[0]}`;
+         slot.appendChild(bookedBy);
+         const dayAndTime = document.createElement("p");
+         dayAndTime.textContent = `Time: ${new Date(a.day_time).toLocaleString("en-US", {
+           month: "long",
+           day: "numeric",
+           year: "numeric",
+           hour: "numeric",
+           minute: "2-digit",
+         })}`
+         slot.appendChild(dayAndTime);
+         slot.dataset.note = `Note: ${a.note}.`;
+         const status = document.createElement("p");
+         status.textContent = `Status: ${a.status}` ;
+         slot.appendChild(status);
+         const note = document.createElement("p");
+         note.textContent = `Note: ${a.note}`;
+         slot.appendChild(note);
+        
+      }); }
+
+    function renderCompletedAppointments(arr){
+      container.innerHTML = "";
+      const guide = document.createElement("h2");
+      guide.textContent = `Completed Appointments`;
+      container.appendChild(guide);
+      arr.forEach((a)=>{
+         const slot = document.createElement("div");
+         slot.classList.add("slot");
+         slot.classList.add("completed");
+         container.appendChild(slot);
+         const bookedBy = document.createElement("p");
+         bookedBy.textContent = `Booker: ${a.username.split("@")[0]}`;
+         slot.appendChild(bookedBy);
+         const dayAndTime = document.createElement("p");
+         dayAndTime.textContent = `Time: ${new Date(a.day_time).toLocaleString("en-US", {
+           month: "long",
+           day: "numeric",
+           year: "numeric",
+           hour: "numeric",
+           minute: "2-digit",
+         })}`
+         slot.appendChild(dayAndTime);
+         slot.dataset.note = `Note: ${a.note}.`;
+         const status = document.createElement("p");
+         status.textContent = `Status: ${a.status}` ;
+         slot.appendChild(status);
+         const note = document.createElement("p");
+         note.textContent = `Note: ${a.note}`;
+         slot.appendChild(note);
+        
+      }); }
+
+   closeViewCompletedADMINErroBOx.addEventListener("click", ()=>{
+      viewCompletedAppointmentsADMINERRORBOX.classList.remove("shown");
+      overlay.classList.remove("active");
+   })
+
+   viewCompletedAppointmentsADMINACTIONBTN.addEventListener("click", async ()=>{
+     adminNav.classList.remove("using");
+     overlay.classList.remove("active");
+     try{
+       const appointments = await getCompletedAppointmentsADMINSIDEAPICaller();
+       if(appointments.forceLogout){
+         forceLogout();
+       }
+       if(!appointments.success){
+         viewCompletedAppointmentsADMINERRORBOX.classList.add("shown");
+         overlay.classList.add("active");
+         return;
+       }
+       renderCompletedAppointments(appointments.datas);
+     }catch(err){
+         viewCompletedAppointmentsADMINERRORBOX.classList.add("shown");
+         overlay.classList.add("active");
+     }
+   });
+
+
+
+   
+   function renderUserCompletedAppointments(arr){
+      containerUser.innerHTML = "";
+      guideText.textContent = `Your Completed Appointments`;
+      hairCutGrid.classList.add("hide");
+      containerUser.classList.add("show");
+      viewHaircutsUser.classList.add("show");
+      arr.forEach((a)=>{
+         const slot = document.createElement("div");
+         slot.classList.add("slot");
+         slot.classList.add("completed");
+         containerUser.appendChild(slot);
+         const bookedBy = document.createElement("p");
+         bookedBy.textContent = `Booker: ${a.username.split("@")[0]}`;
+         slot.appendChild(bookedBy);
+         const dayAndTime = document.createElement("p");
+         dayAndTime.textContent = `Time: ${new Date(a.day_time).toLocaleString("en-US", {
+           month: "long",
+           day: "numeric",
+           year: "numeric",
+           hour: "numeric",
+           minute: "2-digit",
+         })}`
+         slot.appendChild(dayAndTime);
+         slot.dataset.note = `Note: ${a.note}.`;
+         const status = document.createElement("p");
+         status.textContent = `Status: ${a.status}` ;
+         slot.appendChild(status);
+         const note = document.createElement("p");
+         note.textContent = `Note: ${a.note}`;
+         slot.appendChild(note);
+      });
+   }
+
+
+   viewCompletedUserAppointmentsBTN.addEventListener("click", async ()=>{
+      userNav.classList.remove("using");
+      overlay.classList.remove("active");
+     try{
+       const appointments = await viewAllCompletedAppointmentsUserAPICaller();
+       if(appointments.forceLogout){
+         forceLogout();
+       }
+       if(!appointments.success){
+         viewCompletedAppointmentsErrorBox.classList.add("shown");
+         overlay.classList.add("active");
+         return;
+       }
+       renderUserCompletedAppointments(appointments.datas);
+     }catch(err){
+        viewCompletedAppointmentsErrorBox.classList.add("shown");
+        overlay.classList.add("active");
+     }
+   });
+
+   closeViewCompletedAppointmentsErrorBox.addEventListener("click", ()=>{
+      viewCompletedAppointmentsErrorBox.classList.remove("shown");
+      overlay.classList.remove("active");
+   });
+
+
+   
+
+
+    async function getPendingAppointmentsADMIN(){
+      try{
+         
+         const appointments = await getPendingAppointmentsAdminAPICaller();
+         if(appointments.forceLogout){
+          forceLogout();
+         }
+         if(!appointments.success){
+          viewALLPendingAppointmentsErrorBox.classList.add("shown");
+          overlay.classList.add("active");
+          return;
+         }
+         renderPendingAppointments(appointments.datas);
+      }catch(err){
+         console.log(err);
+         viewALLPendingAppointmentsErrorBox.classList.add("shown");
+         overlay.classList.add("active");
+      }
+    }
+
+   
    const container = document.querySelector(".appointments-container");
    const containerUser = document.querySelector(".appointments-container-user");
    const viewHaircutsUser = document.querySelector("#view-haircuts-user");
@@ -236,6 +440,7 @@ function establishSocket(){
            if(!appointments.success){
             viewUserAppointmentsErrorBox.classList.add("shown");
             overlay.classList.add("active");
+            return;
            }
            console.log(appointments);
            renderUserPendingAppointments(appointments.datas);
@@ -305,8 +510,13 @@ function establishSocket(){
    });
 
    function renderPendingAppointments(arr){
+       
       container.innerHTML = "";
+      const guide = document.createElement("h2");
+      guide.textContent = `Pending Appointments`;
+      container.appendChild(guide);
       arr.forEach((a)=>{
+         
          const slot = document.createElement("div");
          slot.classList.add("slot");
          container.appendChild(slot);
@@ -339,6 +549,7 @@ function establishSocket(){
             if(!markAsDone.success){
                markAsDoneApoointmentErrorBox.classList.add("shown");
                overlay.classList.add("active");
+               return;
             }
             getPendingAppointmentsADMIN();
          }catch(err){
@@ -360,6 +571,7 @@ function establishSocket(){
             if(!cancelApp.success){
                cancelAppointmentErrorBox.classList.add("shown");
                overlay.classList.add("active");
+               return;
             }
             getPendingAppointmentsADMIN();
 
@@ -369,6 +581,8 @@ function establishSocket(){
          }
          });
       }); }
+
+
 
 
       viewAPPOINTMENTSUSERBTN.addEventListener("click", async ()=>{
@@ -382,6 +596,7 @@ function establishSocket(){
            if(!appointments.success){
             viewUserAppointmentsErrorBox.classList.add("shown");
             overlay.classList.add("active");
+            return;
            }
            console.log(appointments);
            renderUserPendingAppointments(appointments.datas);
@@ -417,6 +632,7 @@ function establishSocket(){
          if(!appointments.success){
           viewALLPendingAppointmentsErrorBox.classList.add("shown");
           overlay.classList.add("active");
+          return;
          }
          console.log(appointments.datas);
          renderPendingAppointments(appointments.datas);
@@ -503,6 +719,7 @@ function establishSocket(){
        if(!logout.success){
           logoutErrorBox.classList.add("shown");
           overlay.classList.add("active");
+          return;
        }
        adminDiv.classList.remove("logged-in");
        main.classList.remove("logged-in");
@@ -567,7 +784,10 @@ function establishSocket(){
          if(!booking.success){
            bookingErrorBox.classList.add("shown");
            overlay.classList.add("active");
+           return;
          }
+
+         getUserAppointments();
 
          dayTimeInput.value = "";
          noteInput.value = "";
@@ -644,6 +864,7 @@ function establishSocket(){
        if(!logout.success){
           logoutErrorBox.classList.add("shown");
           overlay.classList.add("active");
+          return;
        }
        container.innerHTML = "";
        userDiv.classList.remove("logged-in");
@@ -1003,6 +1224,7 @@ function establishSocket(){
          if(!appointments.success){
           viewALLPendingAppointmentsErrorBox.classList.add("shown");
           overlay.classList.add("active");
+          return;
          }
          renderPendingAppointments(appointments.datas);
       }catch(err){
@@ -1125,7 +1347,9 @@ function establishSocket(){
         markAsDoneApoointmentErrorBox.classList.remove("shown");
         cancelAppointmentErrorBox.classList.remove("shown");
         viewUserAppointmentsErrorBox.classList.remove("shown");
+        viewCompletedAppointmentsErrorBox.classList.remove("shown");
         userCancelAppointmentErrorBox.classList.remove("shown");
+         viewCompletedAppointmentsADMINERRORBOX.classList.remove("shown");
       
        
    });
@@ -1145,4 +1369,3 @@ function establishSocket(){
 
 
    
-})();
