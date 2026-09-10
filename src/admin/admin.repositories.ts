@@ -60,3 +60,20 @@ export async function viewCancelledAppointmentsRepository(){
         throw err;
     }
 }
+export async function viewAdminNotificationsRepository(){
+    try{
+        const notifications = await poolDB.query(`SELECT notifications.*, users.username FROM notifications JOIN users ON notifications.triggered_by = users.user_id ORDER BY notifications.created_at DESC`);
+        return notifications.rows;
+    }catch(err){
+        console.log(err);
+        throw err;
+    }
+}
+export async function addWalkinAppointmentRepository(day_time: string, status: string = 'completed', scheduled_by : string = 'd3299195-1106-4575-9373-5bd48be50fbd', type : string = 'walk-in-appointment'){
+  try{
+     await poolDB.query(`INSERT INTO appointments (day_time, status, scheduled_by, type) VALUES ($1, $2, $3, $4)`, [day_time, status, scheduled_by, type]);
+  }catch(err){
+    console.log(err);
+    throw err;
+  }
+}

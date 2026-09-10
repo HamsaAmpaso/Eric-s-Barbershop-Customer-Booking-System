@@ -340,6 +340,14 @@ footer .bottom #dos{
     transition: all 150ms ease-out;
     border-radius: 3px;
 }
+.notifications-div{
+    width: 70%;
+    height: 80%;
+    gap: 2vw;
+}
+.notifications-div .notif{
+    gap: 1vw;
+}
 
 
     

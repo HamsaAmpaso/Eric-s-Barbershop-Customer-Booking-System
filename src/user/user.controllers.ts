@@ -3,6 +3,7 @@ import { bookAppointmentService } from "./user.services.js";
 import { viewUserPendingAppointmentsService } from "./user.services.js";
 import { cancelAppointmentByUserService } from "./user.services.js";
 import { viewAllCompletedAppointmentsUserService } from "./user.services.js";
+import { viewNotificationsUserService } from "./user.services.js";
 export async function bookAppointmentController(req: Request, res: Response, next: NextFunction){
     try{
         const scheduled_by = req.auth?.id!;
@@ -50,6 +51,18 @@ export async function viewAllCompletedAppointmetsUserController(req: Request, re
             success: true,
             datas: appointments
         });
+    }catch(err){
+        next(err);
+    }
+}
+export async function viewNotificationsUserController(req: Request, res: Response, next: NextFunction){
+    try{
+        const userId = req.auth?.id!;
+        const notifications = await viewNotificationsUserService(userId);
+        res.status(200).json({
+            success: true,
+            datas: notifications
+        }); 
     }catch(err){
         next(err);
     }

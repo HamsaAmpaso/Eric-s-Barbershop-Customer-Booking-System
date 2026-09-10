@@ -15,6 +15,14 @@ export async function insertNotificationRepository(triggered_by:string, message:
         throw err;
     }
 }
+export async function insertNotificationRepository2(triggered_by:string, message: string, type: string ){
+    try{
+       await poolDB.query(`INSERT INTO notifications (triggered_by, message, type) VALUES ($1, $2, $3)`, [triggered_by, message, type]);
+    }catch(err){
+        console.log(err);
+        throw err;
+    }
+}
 export async function viewAllUserPendingAppointments(userId: string){
     try{
         const appointments = await poolDB.query(`SELECT appointments.*, users.username FROM appointments JOIN users ON appointments.scheduled_by = users.user_id WHERE scheduled_by = $1 AND status = 'pending'`, [userId]);
@@ -36,6 +44,16 @@ export async function viewAllCompletedAppointmentsUserRepository(userId: string)
     try{
         const appointments = await poolDB.query(`SELECT appointments.*, users.username FROM appointments JOIN users ON appointments.scheduled_by = users.user_id WHERE scheduled_by = $1 AND status = 'completed'`,[userId]);
         return appointments.rows;
+    }catch(err){
+        console.log(err);
+        throw err;
+    }
+}
+
+export async function viewNotificationsUserRepository(userId: string){
+    try{
+        const notifications = await poolDB.query(`SELECT users_notifications.*, users.username FROM users_notifications JOIN users ON users_notifications.owned_by = users.user_id WHERE users_notifications.owned_by = $1 ORDER BY users_notifications.created_at DESC`, [userId]);
+        return notifications.rows;
     }catch(err){
         console.log(err);
         throw err;

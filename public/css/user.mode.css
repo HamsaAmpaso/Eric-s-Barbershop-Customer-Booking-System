@@ -123,3 +123,83 @@
 #view-haircuts-user.show{
     display: block;
 }
+.notifications-div{
+    z-index: 190;
+    background-color: #0F0F0F;
+    position: fixed;
+    height: 70%;
+    top: 0%;
+    left: -100%;
+    width: 30%;
+    padding-top: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    border-radius: 5px;
+    overflow-y: scroll;
+    gap: 0.5vw;
+    padding-bottom: 10px;
+    scrollbar-width: thin;
+    scrollbar-color: #3a3a3a transparent;
+    padding-left: 20px;
+    padding-right: 10px;
+    
+
+
+}
+.notifications-div::-webkit-scrollbar {
+    width: 7px;
+}
+
+.notifications-div::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.notifications-div::-webkit-scrollbar-thumb {
+    background: #2f2f2f;
+    border-radius: 10px;
+    border: 1px solid #0F0F0F;
+}
+
+.notifications-div::-webkit-scrollbar-thumb:hover {
+    background: #4a4a4a;
+}
+
+.notifications-div::-webkit-scrollbar-thumb:active {
+    background: #5a5a5a;
+}
+.notifications-div.show{
+    left: 0%;
+}
+.notifications-div .notif{
+    width: 100%;
+    height: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: clamp(0.8em, 1.5vw, 1.5rem);
+    gap: 0.5vw;
+    border: 0.3px solid var(--off-white);
+    border-radius: 5px;
+    padding: clamp(0.5rem, 1vw, 1rem);
+
+}
+.notifications-div  h3{
+    color: var(--off-white);
+    font-family: var(--font-primary);
+    font-size: clamp(0.9rem, 1.4vw, 1.4rem);
+    max-width: 250px;
+}
+.notifications-div .notif h4{
+    color: var(--off-white);
+    font-family: var(--font-secondary);
+    font-size: clamp(0.8rem, 1.3vw, 1.3rem);
+    max-width: 250px;
+}
+.notifications-div .notif p{
+    color: var(--off-white);
+    font-family: var(--font-secondary);
+    font-size: clamp(0.6rem, 1vw, 1rem);
+}

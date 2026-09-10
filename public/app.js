@@ -11,6 +11,9 @@ import { cancelAppointmentUserAPICaller } from "./user-api-callers.js";
 import { viewAllCompletedAppointmentsUserAPICaller } from "./user-api-callers.js";
 import { getCompletedAppointmentsADMINSIDEAPICaller } from "./admin-api-callers.js";
 import { viewCancelledAppointmentsAPICaller } from "./admin-api-callers.js";
+import { viewNotificationsUserAPICaller } from "./user-api-callers.js";
+import { viewAdminNotificationsAPICaller } from "./admin-api-callers.js";
+import { addWalkinAPICaller } from "./admin-api-callers.js";
 const notifSound = new Audio("./sounds/notification.wav");
 
 
@@ -142,6 +145,8 @@ function establishSocket(){
    const viewAllCancelledAppointments = document.querySelector("#view-all-calcelled-appointments");
    const viewCancelledAppointmentsErrorBox = document.querySelector("#admin-cancelled-view-appointment-error-box");
    const closeViewCancelledAppointmentsErrorBox = document.querySelector(".okay-admin-cancelled-view-appointments");
+   const viewNotificationsUserBTN = document.querySelector("#user-notifications");
+
 
     if(status === "account-pending"){
        confirmSignupBOX.classList.add("using");
@@ -204,6 +209,129 @@ function establishSocket(){
        establishSocket();
        
    }
+
+   const userNotificationsDiv = document.querySelector("#user-notifications-div");
+   const userViewNotificationsErroBox = document.querySelector("#user-view-notifications-error-box");
+   const closeUserViewNotificationsErrorBox = document.querySelector(".okay-user-view-notifications");
+
+   const adminNotificationsDiv = document.querySelector("#admin-notifications-div");
+   const viewAdminNotificationsBTN = document.querySelector("#admin-notifications");
+   const adminViewNotificationErrorBox = document.querySelector("#admin-view-notifications-error-box");
+   const closeAdminViewNotificationsErrorBox = document.querySelector(".okay-admin-view-notifications");
+
+     function renderAdminNotifications(arr){
+      adminNotificationsDiv.innerHTML = "";
+      const text = document.createElement("h3");
+      text.textContent = `Your Notifications`;
+      adminNotificationsDiv.appendChild(text);
+      arr.forEach((a)=>{
+        const notif = document.createElement("div");
+        notif.classList.add("notif")
+        adminNotificationsDiv.appendChild(notif);
+        const subject = document.createElement("h4");
+        subject.textContent = `${a.type}`;
+        notif.appendChild(subject);
+        const message = document.createElement("p");
+        message.textContent = a.message;
+        notif.appendChild(message);
+        const time = document.createElement("p");
+        time.textContent = new Date(a.created_at).toLocaleString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+        hour: "numeric",
+        minute: "2-digit",
+        });
+        notif.appendChild(time);
+      });
+   }
+
+   closeAdminViewNotificationsErrorBox.addEventListener("click", ()=>{
+      adminViewNotificationErrorBox.classList.remove("shown");
+      overlay.classList.remove("active");
+   });
+
+   viewAdminNotificationsBTN.addEventListener("click", async ()=>{
+     adminNav.classList.remove("using");
+     overlay.classList.add("active");
+     adminNotificationsDiv.classList.add("show");
+     try{
+        const notifications = await viewAdminNotificationsAPICaller();
+
+        if(notifications.forceLogout){
+         forceLogout();
+        }
+        if(!notifications.success){
+            adminViewNotificationErrorBox.classList.add("shown");
+            overlay.classList.add("active");
+            return;
+        }
+        renderAdminNotifications(notifications.datas);
+     }catch(err){
+        console.log(err);
+        adminViewNotificationErrorBox.classList.add("shown");
+            overlay.classList.add("active");
+     }
+   });
+
+   
+   
+
+
+   function renderUserNotifications(arr){
+      userNotificationsDiv.innerHTML = "";
+      const text = document.createElement("h3");
+      text.textContent = `Your Notifications`;
+      userNotificationsDiv.appendChild(text);
+      arr.forEach((a)=>{
+        const notif = document.createElement("div");
+        notif.classList.add("notif")
+        userNotificationsDiv.appendChild(notif);
+        const subject = document.createElement("h4");
+        subject.textContent = `${a.type}`;
+        notif.appendChild(subject);
+        const message = document.createElement("p");
+        message.textContent = a.message;
+        notif.appendChild(message);
+        const time = document.createElement("p");
+        time.textContent = new Date(a.created_at).toLocaleString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+        hour: "numeric",
+        minute: "2-digit",
+        });
+        notif.appendChild(time);
+      });
+   }
+
+   closeUserViewNotificationsErrorBox.addEventListener("click", ()=>{
+      userViewNotificationsErroBox.classList.remove("shown");
+      overlay.classList.remove("active");
+   });
+
+   viewNotificationsUserBTN.addEventListener("click", async ()=>{
+      userNav.classList.remove("using");
+      overlay.classList.add("active");
+      userNotificationsDiv.classList.add("show");
+      try{
+         const notifications = await viewNotificationsUserAPICaller();
+         if(notifications.forceLogout){
+            forceLogout();
+         }
+         if(!notifications.success){
+            userViewNotificationsErroBox.classList.add("shown");
+            overlay.classList.add("active");
+            return;
+         }
+         console.log(notifications.datas);
+         renderUserNotifications(notifications.datas);
+      }catch(err){
+         console.log(err);
+         userViewNotificationsErroBox.classList.add("shown");
+         overlay.classList.add("active");
+      }
+   });
 
    closeViewCancelledAppointmentsErrorBox.addEventListener("click", ()=>{
       viewCancelledAppointmentsErrorBox.classList.remove("shown");
@@ -665,7 +793,15 @@ function establishSocket(){
       overlay.classList.add("active");
    });
 
-   confirmWalkinBTN.addEventListener("click", ()=>{
+   const addWalkinAppointmentsErrorBox = document.querySelector("#admin-add-walkin-error-box");
+   const closeAddWalkinAppointmentsErrorBox= document.querySelector(".okay-admin-add-walkin");
+
+   closeAddWalkinAppointmentsErrorBox.addEventListener("click", ()=>{
+       addWalkinAppointmentsErrorBox.classList.remove("shown");
+       overlay.classList.remove("active");
+   })
+
+   confirmWalkinBTN.addEventListener("click", async ()=>{
     let hasError = false;
     const appointmentTime = new Date(dayAndTimeInputWalkin.value);
      if(dayAndTimeInputWalkin.value === "" || appointmentTime.getTime() > Date.now()){
@@ -676,6 +812,22 @@ function establishSocket(){
      }
      if(hasError)return;
      const walkinDateAndTime = new Date(dayAndTimeInputWalkin.value).toISOString();
+     try{
+       const add = await addWalkinAPICaller(walkinDateAndTime);
+       if(add.forceLogout){
+         forceLogout();
+       }
+       if(!add.success){
+          addWalkinAppointmentsErrorBox.classList.add("shown");
+          overlay.classList.add("active");
+          return;
+       }
+       
+     }catch(err){
+      console.log(err);
+       addWalkinAppointmentsErrorBox.classList.add("shown");
+       overlay.classList.add("active");
+     }
      dayAndTimeErrorWalkin.textContent = "";
      dayAndTimeErrorWalkin.classList.remove("errored");
      dayAndTimeInputWalkin.value = "";
@@ -1350,7 +1502,11 @@ function establishSocket(){
         viewCompletedAppointmentsErrorBox.classList.remove("shown");
         userCancelAppointmentErrorBox.classList.remove("shown");
          viewCompletedAppointmentsADMINERRORBOX.classList.remove("shown");
-      
+          userNotificationsDiv.classList.remove("show");
+           userViewNotificationsErroBox.classList.remove("shown");
+           adminNotificationsDiv.classList.remove("show");
+           adminViewNotificationErrorBox.classList.remove("shown");
+           addWalkinAppointmentsErrorBox.classList.remove("shown");
        
    });
 

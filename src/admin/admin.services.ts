@@ -5,6 +5,8 @@ import { getAppointmentTime } from "./admin.repositories.js";
 import { cancelAppointmentAdminRepository } from "./admin.repositories.js";
 import { getAllCompletedTasksADMINSIDERepository } from "./admin.repositories.js";
 import { viewCancelledAppointmentsRepository } from "./admin.repositories.js";
+import { viewAdminNotificationsRepository } from "./admin.repositories.js";
+import { addWalkinAppointmentRepository } from "./admin.repositories.js";
 import { io } from "../server.js";
 export async function getAllPendingAppointmentsAdminService(){
     try{
@@ -72,6 +74,23 @@ export async function viewCancelledAppointmentsService(){
     try{
         const appointments = await viewCancelledAppointmentsRepository();
         return appointments;
+    }catch(err){
+        console.log(err);
+        throw err;
+    }
+}
+export async function viewAdminNotificationsService(){
+    try{
+        const notifications = await viewAdminNotificationsRepository();
+        return notifications;
+    }catch(err){
+        console.log(err);
+        throw err;
+    }
+}
+export async function addWalkinService(day_time: string){
+    try{
+        await addWalkinAppointmentRepository(day_time);
     }catch(err){
         console.log(err);
         throw err;

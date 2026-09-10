@@ -21,3 +21,6 @@ export function validator(schema: z.ZodSchema){
        next();
    };
 }
+export const walkinSchema = z.object({
+    day_time: z.string()
+});

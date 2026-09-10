@@ -1,9 +1,11 @@
 import { bookAppointmentRepository } from "./user.repositories.js";
 import { io } from "../server.js";
 import { insertNotificationRepository } from "./user.repositories.js";
+import { insertNotificationRepository2 } from "./user.repositories.js";
 import { viewAllUserPendingAppointments } from "./user.repositories.js";
 import { cancelAppointmentByUserRepository } from "./user.repositories.js";
 import { viewAllCompletedAppointmentsUserRepository } from "./user.repositories.js";
+import { viewNotificationsUserRepository } from "./user.repositories.js";
 export async function bookAppointmentService(scheduled_by: string, day_time: string, note: string, username: string){
     try{
         await bookAppointmentRepository(scheduled_by, day_time, note);
@@ -53,13 +55,13 @@ export async function cancelAppointmentByUserService(appointment_id: string, use
               minute: "2-digit",
             })}`
         });
-        await insertNotificationRepository(userId, `${username} cancelled his appointment at ${new Date(day_time).toLocaleString("en-US", {
+        await insertNotificationRepository2(userId, `${username} cancelled his appointment at ${new Date(day_time).toLocaleString("en-US", {
         month: "long",
         day: "numeric",
         year: "numeric",
         hour: "numeric",
         minute: "2-digit",
-        })}`);
+        })}`, 'appointment-cancelled');
 
     }catch(err){
         console.log(err);
@@ -70,6 +72,16 @@ export async function viewAllCompletedAppointmentsUserService(userId: string){
     try{
         const appointments = await viewAllCompletedAppointmentsUserRepository(userId);
         return appointments;
+    }catch(err){
+        console.log(err);
+        throw err;
+    }
+}
+export async function viewNotificationsUserService(userid: string){
+    try{
+        const notifications = await viewNotificationsUserRepository(userid);
+        return notifications;
+
     }catch(err){
         console.log(err);
         throw err;
