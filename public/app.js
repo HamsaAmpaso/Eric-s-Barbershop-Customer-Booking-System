@@ -1466,7 +1466,7 @@ function registerSocket() {
        
       
         const popup = window.open(
-        "https://eric-s-barbershop-customer-booking-system.onrender.com/signup/google",
+        "https://eric-s-barbershop-customer-booking-system.onrender.com/auth/signup/google",
         "googleSignup",
         "width=500,height=600"
        );
