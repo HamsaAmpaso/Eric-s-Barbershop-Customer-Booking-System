@@ -880,7 +880,7 @@ function registerSocket() {
          slot.classList.add("slot");
          container.appendChild(slot);
          const bookedBy = document.createElement("p");
-         bookedBy.textContent = `Booker: ${a.username.split("@")[0]}`;
+         bookedBy.textContent = `Booker: ${a.username.split("@")[0].slice(0, 12)}`;
          slot.appendChild(bookedBy);
          const dayAndTime = document.createElement("p");
          dayAndTime.textContent = `Time: ${new Date(a.day_time).toLocaleString("en-US", {
