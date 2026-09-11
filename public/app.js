@@ -14,6 +14,7 @@ import { viewCancelledAppointmentsAPICaller } from "./admin-api-callers.js";
 import { viewNotificationsUserAPICaller } from "./user-api-callers.js";
 import { viewAdminNotificationsAPICaller } from "./admin-api-callers.js";
 import { addWalkinAPICaller } from "./admin-api-callers.js";
+import { dashboardAPICaller } from "./admin-api-callers.js";
 const notifSound = new Audio("./sounds/notification.wav");
 
 
@@ -218,6 +219,211 @@ function establishSocket(){
    const viewAdminNotificationsBTN = document.querySelector("#admin-notifications");
    const adminViewNotificationErrorBox = document.querySelector("#admin-view-notifications-error-box");
    const closeAdminViewNotificationsErrorBox = document.querySelector(".okay-admin-view-notifications");
+   const dashboardBTN = document.querySelector("#dashboard");
+   const dashboardErrorBOx = document.querySelector("#admin-dashboard-error-box");
+   const closeDashboardErrorBox = document.querySelector(".okay-admin-dashboard");
+   const dashboardDiv = document.querySelector(".dashboard-div");
+
+   function renderDashboard(obj){
+      dashboardDiv.innerHTML = "";
+      dashboardDiv.classList.add("show");
+      const todayAppointmentsDiv = document.createElement("div");
+      todayAppointmentsDiv.classList.add("board");
+      todayAppointmentsDiv.id = "todayAppointments";
+      dashboardDiv.appendChild(todayAppointmentsDiv);
+      const todayAppointmentsP = document.createElement("p");
+      todayAppointmentsP.textContent = `Appointments Today`;
+      todayAppointmentsDiv.appendChild(todayAppointmentsP);
+      const todayAppointmentValue = document.createElement("h3");
+      todayAppointmentValue.textContent = obj.appointmentsToday;
+      todayAppointmentsDiv.appendChild(todayAppointmentValue);
+
+      const revenueTodayDiv = document.createElement("div");
+      revenueTodayDiv.classList.add("board");
+      revenueTodayDiv.id = "revenueToday";
+      dashboardDiv.appendChild(revenueTodayDiv);
+      const revenueTodatP = document.createElement("p");
+      revenueTodatP.textContent = "Revenue Today";
+      revenueTodayDiv.appendChild(revenueTodatP);
+      const revenueTodayValue = document.createElement("h3");
+      revenueTodayValue.textContent = `${obj.revenueToday}₱`;
+      revenueTodayDiv.appendChild(revenueTodayValue);
+
+      const completedTodayDiv = document.createElement("div");
+      completedTodayDiv.classList.add("board");
+      completedTodayDiv.id = "completedToday";
+      dashboardDiv.appendChild(completedTodayDiv);
+      const compleetdTodayP = document.createElement("p");
+      compleetdTodayP.textContent = 'Completed Today';
+      completedTodayDiv.appendChild(compleetdTodayP);
+      const compleetdTodayValue = document.createElement("h3");
+      compleetdTodayValue.textContent = obj.completedToday;
+      completedTodayDiv.appendChild(compleetdTodayValue);
+
+      const cancelledTodayDiv = document.createElement("div");
+      cancelledTodayDiv.classList.add("board");
+      cancelledTodayDiv.id = "cancelledToday";
+      dashboardDiv.appendChild(cancelledTodayDiv);
+      const cancelledTodayP = document.createElement("p");
+      cancelledTodayP.textContent = "Cancelled Today";
+      cancelledTodayDiv.appendChild(cancelledTodayP);
+      const cancelledTodayValue = document.createElement("h3");
+      cancelledTodayValue.textContent = obj.cancelledToday;
+      cancelledTodayDiv.appendChild(cancelledTodayValue);
+
+      const totalIncomeDiv = document.createElement("div");
+      totalIncomeDiv.classList.add("board");
+      totalIncomeDiv.id = "totalIncome";
+      dashboardDiv.appendChild(totalIncomeDiv);
+      const totalIncomeP =  document.createElement("p");
+      totalIncomeP.textContent = "Total Income";
+      totalIncomeDiv.appendChild(totalIncomeP);
+      const totalIncomeValue = document.createElement("h3");
+      totalIncomeValue.textContent = `${obj.totalIncome}₱`;
+      totalIncomeDiv.appendChild(totalIncomeValue);
+
+      const allCancelledDiv = document.createElement("div");
+      allCancelledDiv.classList.add("board");
+      allCancelledDiv.id = "cancelledOverall";
+      dashboardDiv.appendChild(allCancelledDiv);
+      const allCancelledP = document.createElement("p");
+      allCancelledP.textContent = "Cancelled";
+      allCancelledDiv.appendChild(allCancelledP);
+      const allCancelledValue = document.createElement("h3");
+      allCancelledValue.textContent = obj.allCancelled;
+      allCancelledDiv.appendChild(allCancelledValue);
+
+      const allPendingDiv = document.createElement("div");
+      allPendingDiv.classList.add("board");
+      allPendingDiv.id = "pendingOverall";
+      dashboardDiv.appendChild(allPendingDiv);
+      const allPendingP = document.createElement("p");
+      allPendingP.textContent = "Pending";
+      allPendingDiv.appendChild(allPendingP);
+      const allPendingValue = document.createElement("h3");
+      allPendingValue.textContent = obj.allPending;
+      allPendingDiv.appendChild(allPendingValue);
+
+      const appointmentsPerDayDiv = document.createElement("div");
+      appointmentsPerDayDiv.classList.add("board");
+      appointmentsPerDayDiv.id = "appointmentsPerDay";
+      dashboardDiv.appendChild(appointmentsPerDayDiv);
+      const canvas = document.createElement("canvas");
+      appointmentsPerDayDiv.appendChild(canvas);
+      
+      const dates = obj.appointmentsPerDay.map((a)=> new Date(a.day).toLocaleDateString());
+      const numbers = obj.appointmentsPerDay.map((a)=> a.number);
+
+       const expenseChart = new Chart(canvas, {
+        type: "bar",
+
+        data: {
+            labels: dates,
+
+            datasets: [
+                {
+                    label: "Daily Completed Appointments",
+                    data: numbers
+                }
+            ]
+        },
+
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+
+
+    const comparisonDiv = document.createElement("div");
+    comparisonDiv.classList.add("board");
+    comparisonDiv.id = "comparison";
+    dashboardDiv.appendChild(comparisonDiv);
+    const pie = document.createElement("canvas");
+    comparisonDiv.appendChild(pie);
+
+    const expenseChart2 = new Chart(pie, {
+        type: "pie",
+
+        data: {
+            labels: ["Walk in", "Online"],
+
+            datasets: [
+                {
+                    label: "Appointment Distribution",
+                     data: [
+                      obj.comparison.walkin,
+                      obj.comparison.online
+                     ]
+                }
+            ]
+        },
+
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+
+
+
+
+
+   }
+
+   closeDashboardErrorBox.addEventListener("click", ()=>{
+      dashboardErrorBOx.classList.remove("shown");
+      overlay.classList.remove("active");
+   });
+
+   dashboardBTN.addEventListener("click", async ()=>{
+        adminNav.classList.remove("using");
+        overlay.classList.remove("active");
+        container.innerHTML = "";
+        container.classList.add("hide");
+        try{
+           const dashboard = await dashboardAPICaller();
+           if(dashboard.forceLogout){
+            forceLogout();
+           }
+           if(!dashboard.success){
+             dashboardErrorBOx.classList.add("shown");
+             overlay.classList.add("active");
+             return;
+           }
+           console.log(dashboard.datas);
+           renderDashboard(dashboard.datas);
+        }catch(err){
+         console.log(err);
+         dashboardErrorBOx.classList.add("shown");
+         overlay.classList.add("active");
+        }
+   });
+
+   async function getDashboard(){
+        adminNav.classList.remove("using");
+        overlay.classList.remove("active");
+        container.innerHTML = "";
+        container.classList.add("hide");
+        try{
+           const dashboard = await dashboardAPICaller();
+           if(dashboard.forceLogout){
+            forceLogout();
+           }
+           if(!dashboard.success){
+             dashboardErrorBOx.classList.add("shown");
+             overlay.classList.add("active");
+             return;
+           }
+           console.log(dashboard.datas);
+           renderDashboard(dashboard.datas);
+        }catch(err){
+         console.log(err);
+         dashboardErrorBOx.classList.add("shown");
+         overlay.classList.add("active");
+        }
+   }
+
 
      function renderAdminNotifications(arr){
       adminNotificationsDiv.innerHTML = "";
@@ -264,13 +470,16 @@ function establishSocket(){
         if(!notifications.success){
             adminViewNotificationErrorBox.classList.add("shown");
             overlay.classList.add("active");
+             adminNotificationsDiv.classList.remove("show");
             return;
+            
         }
         renderAdminNotifications(notifications.datas);
      }catch(err){
         console.log(err);
         adminViewNotificationErrorBox.classList.add("shown");
             overlay.classList.add("active");
+            adminNotificationsDiv.classList.remove("show");
      }
    });
 
@@ -322,6 +531,7 @@ function establishSocket(){
          if(!notifications.success){
             userViewNotificationsErroBox.classList.add("shown");
             overlay.classList.add("active");
+            userNotificationsDiv.classList.remove("show");
             return;
          }
          console.log(notifications.datas);
@@ -330,6 +540,7 @@ function establishSocket(){
          console.log(err);
          userViewNotificationsErroBox.classList.add("shown");
          overlay.classList.add("active");
+           userNotificationsDiv.classList.remove("show"); 
       }
    });
 
@@ -362,6 +573,9 @@ function establishSocket(){
    });
 
     function renderCancelledAppointments(arr){
+       container.classList.remove("hide");
+      dashboardDiv.innerHTML = "";
+      dashboardDiv.classList.remove("show");
       container.innerHTML = "";
       const guide = document.createElement("h2");
       guide.textContent = `Cancelled Appointments`;
@@ -394,7 +608,10 @@ function establishSocket(){
       }); }
 
     function renderCompletedAppointments(arr){
+       container.classList.remove("hide");
       container.innerHTML = "";
+      dashboardDiv.innerHTML = "";
+      dashboardDiv.classList.remove("show");
       const guide = document.createElement("h2");
       guide.textContent = `Completed Appointments`;
       container.appendChild(guide);
@@ -638,7 +855,9 @@ function establishSocket(){
    });
 
    function renderPendingAppointments(arr){
-       
+       container.classList.remove("hide");
+      dashboardDiv.innerHTML = "";
+      dashboardDiv.classList.remove("show");
       container.innerHTML = "";
       const guide = document.createElement("h2");
       guide.textContent = `Pending Appointments`;
@@ -822,6 +1041,8 @@ function establishSocket(){
           overlay.classList.add("active");
           return;
        }
+
+       getDashboard();
        
      }catch(err){
       console.log(err);

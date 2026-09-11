@@ -10,6 +10,7 @@
       href="https://fonts.googleapis.com/css2?family=Acme&family=Amatic+SC:wght@400;700&family=Anton&family=Bangers&family=Bebas+Neue&family=Bitcount+Grid+Single:wght@100..900&family=Bitcount+Prop+Double+Ink:wght@100..900&family=Caprasimo&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Just+Another+Hand&family=Manrope:wght@200..800&family=Modak&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@400..800&family=Roboto:ital,wght@0,100..900;1,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&family=Syne:wght@400..800&display=swap"
       rel="stylesheet"
     />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
     <script type="module" src="app.js" defer></script>
     <link rel="stylesheet" href="./css/base.css" />
@@ -234,6 +235,7 @@
         
       </header>
       <div class="appointments-container"></div>
+      <div class="dashboard-div"></div>
     </div>
     <div class="user-mode">
       <header class="header">
@@ -481,6 +483,14 @@
         so you can log in to your account properly.
       </p>
       <button class="okay-admin-add-walkin">Okay</button>
+    </div>
+      <div id="admin-dashboard-error-box" class="error-box">
+      <h2>We couldn't get you your dashboard at the moment!</h2>
+      <p>
+        Something went wrong while fetching your dashboard. We advise you to log out your account
+        so you can log in to your account properly.
+      </p>
+      <button class="okay-admin-dashboard">Okay</button>
     </div>
   </body>
 </html>

@@ -77,3 +77,97 @@ export async function addWalkinAppointmentRepository(day_time: string, status: s
     throw err;
   }
 }
+export async function getTodaysAppointmentsRepository(){
+    try{
+        const appointments = await poolDB.query(`SELECT COALESCE(COUNT(*), 0) AS "number" FROM appointments WHERE day_time >= CURRENT_DATE
+        AND day_time < CURRENT_DATE + INTERVAL '1 day' AND status = 'pending'`);
+        return appointments.rows[0].number;
+
+    }catch(err){
+        console.log(err);
+        throw err;
+    }
+}
+export async function getTotalRevenueTodayRepository(){
+    try{
+        const total = await poolDB.query(`SELECT COALESCE(SUM(price), 0) AS "total" FROM appointments WHERE day_time >= CURRENT_DATE
+        AND day_time < CURRENT_DATE + INTERVAL '1 day' AND status = 'completed'`);
+        return total.rows[0].total;
+    }catch(err){
+        console.log(err);
+        throw err;
+    }
+}
+export async function getCompletedAppointmentsTodayRepository(){
+    try{
+        const appointments = await poolDB.query(`SELECT COALESCE(COUNT(*), 0) AS "number" FROM appointments WHERE day_time >= CURRENT_DATE
+        AND day_time < CURRENT_DATE + INTERVAL '1 day' AND status = 'completed'`);
+        return appointments.rows[0].number;
+    }catch(err){
+        console.log(err);
+        throw err;
+    }
+}
+
+export async function cancelledAppointmentsToday(){
+    try{
+        const appointments = await poolDB.query(`SELECT COALESCE(COUNT(*), 0) AS "number" FROM appointments WHERE day_time >= CURRENT_DATE
+        AND day_time < CURRENT_DATE + INTERVAL '1 day' AND status = 'cancelled'`);
+        return appointments.rows[0].number;
+    }catch(err){
+        console.log(err);
+        throw err;
+    }
+}
+export async function appointmentsPerDayRepository(){
+    try{
+        const appointments = await poolDB.query(`SELECT day_time::date AS "day", COUNT(*) AS "number" FROM appointments WHERE status = 'completed' GROUP BY day_time::date ORDER BY day_time::date DESC`);
+        return appointments.rows;
+    }catch(err){
+        console.log(err);
+        throw err;
+    }
+}
+export async function walkinAndOnlineComparisonRepository(){
+    try{
+         const result = await poolDB.query(`
+            SELECT
+                COUNT(*) FILTER (WHERE type = 'walk-in-appointment') AS walkin,
+                COUNT(*) FILTER (WHERE type = 'online-appointment') AS online
+            FROM appointments
+            WHERE status = 'completed'
+        `);
+
+        return result.rows[0];
+    }catch(err){
+        console.log(err);
+        throw err;
+    }
+}
+export async function totalIncomeRepository(){
+    try{
+        const total = await poolDB.query(`SELECT COALESCE(SUM(price), 0) AS "total" FROM appointments WHERE status = 'completed'`);
+        return total.rows[0].total;
+    }catch(err){
+        console.log(err);
+        throw err;
+    }
+}
+export async function allCancelledAppointments(){
+    try{
+        const cancelled = await poolDB.query(`SELECT COUNT(*) AS "total" FROM appointments WHERE status = 'cancelled'`);
+        return cancelled.rows[0].total;
+    }catch(err){
+        console.log(err);
+        throw err;
+    }
+}
+export async function allPendingAppointments(){
+    try{
+        const pending = await poolDB.query(`SELECT COUNT(*) AS "total" FROM appointments WHERE status = 'pending'`);
+        return pending.rows[0].total;
+    }catch(err){
+        console.log(err);
+        throw err;
+    }
+}

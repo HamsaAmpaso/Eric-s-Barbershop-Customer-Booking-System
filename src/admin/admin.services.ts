@@ -1,4 +1,4 @@
-import { getAllPendingAppointmentsAdminRepository } from "./admin.repositories.js";
+import {  getAllPendingAppointmentsAdminRepository } from "./admin.repositories.js";
 import { markAsDoneAppointment } from "./admin.repositories.js";
 import { insertUserADMINNotificationRepository } from "./admin.repositories.js";
 import { getAppointmentTime } from "./admin.repositories.js";
@@ -7,13 +7,22 @@ import { getAllCompletedTasksADMINSIDERepository } from "./admin.repositories.js
 import { viewCancelledAppointmentsRepository } from "./admin.repositories.js";
 import { viewAdminNotificationsRepository } from "./admin.repositories.js";
 import { addWalkinAppointmentRepository } from "./admin.repositories.js";
+import { getTodaysAppointmentsRepository } from "./admin.repositories.js";
+import { getTotalRevenueTodayRepository } from "./admin.repositories.js";
+import { getCompletedAppointmentsTodayRepository } from "./admin.repositories.js";
+import { cancelledAppointmentsToday } from "./admin.repositories.js";
+import { appointmentsPerDayRepository } from "./admin.repositories.js";
+import { walkinAndOnlineComparisonRepository } from "./admin.repositories.js";
+import { totalIncomeRepository } from "./admin.repositories.js";
+import { allCancelledAppointments } from "./admin.repositories.js";
+import { allPendingAppointments } from "./admin.repositories.js";
 import { io } from "../server.js";
 export async function getAllPendingAppointmentsAdminService(){
     try{
         const data = await getAllPendingAppointmentsAdminRepository();
         return data;
     }catch(err){
-        console.log(err);
+        console.log(err); 
         throw err;
     }
 }
@@ -93,6 +102,33 @@ export async function addWalkinService(day_time: string){
         await addWalkinAppointmentRepository(day_time);
     }catch(err){
         console.log(err);
+        throw err;
+    }
+}
+export async function dashboardService(){
+    try{
+        const TodaysAppointments = await getTodaysAppointmentsRepository();
+        const totalRevenuToday = await getTotalRevenueTodayRepository();
+        const allCompletedAppointmentToday = await getCompletedAppointmentsTodayRepository();
+        const cancelledAppointmentsTodayValue = await cancelledAppointmentsToday();
+        const AppointmentsPErDay = await appointmentsPerDayRepository();
+        const walkINComparison = await walkinAndOnlineComparisonRepository();
+        const TotalIncome = await totalIncomeRepository();
+        const allCancelledOverall = await allCancelledAppointments();
+        const allPending = await allPendingAppointments();
+        return {
+            appointmentsToday: TodaysAppointments,
+            revenueToday: totalRevenuToday,
+            completedToday: allCompletedAppointmentToday,
+            cancelledToday: cancelledAppointmentsTodayValue,
+            appointmentsPerDay: AppointmentsPErDay,
+            comparison: walkINComparison,
+            totalIncome: TotalIncome,
+            allCancelled: allCancelledOverall,
+            allPending: allPending
+        }
+    }catch(err){
+        console.log(err)
         throw err;
     }
 }

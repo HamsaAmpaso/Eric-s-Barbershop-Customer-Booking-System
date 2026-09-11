@@ -8,6 +8,9 @@
     gap: 2vw;
     min-height: 90vh;
 }
+.appointments-container.hide{
+    display: none;
+}
 .appointments-container h2{
      color: var(--off-white);
     font-family: var(--font-primary);

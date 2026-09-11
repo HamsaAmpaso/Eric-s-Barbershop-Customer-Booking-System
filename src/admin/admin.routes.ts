@@ -11,6 +11,7 @@ import { getALlCompletedAppointmentsController } from './admin.controllers.js';
 import { viewCancelledAppointmentsController } from './admin.controllers.js';
 import { viewAdminNotificationsController } from './admin.controllers.js';
 import { addWalkinController } from './admin.controllers.js';
+import { dashboardController } from './admin.controllers.js';
 export const adminRoutes = express.Router();
 adminRoutes.get('/appointments/pending', authenticationMiddleware, authorize("admin"), asyncControllerHandler(getAllPendingAppointmentsAdminController));
 adminRoutes.patch('/appointments/pending', authenticationMiddleware, authorize("admin"), asyncControllerHandler(markAsDoneAppointmentController));
@@ -19,3 +20,4 @@ adminRoutes.get('/appointments/completed', authenticationMiddleware, authorize("
 adminRoutes.get('/appointments/cancelled', authenticationMiddleware, authorize("admin"), asyncControllerHandler(viewCancelledAppointmentsController));
 adminRoutes.get('/notifications', authenticationMiddleware, authorize("admin"), asyncControllerHandler(viewAdminNotificationsController));
 adminRoutes.post('/appointments', authenticationMiddleware, authorize("admin"), validator(walkinSchema), asyncControllerHandler(addWalkinController));
+adminRoutes.get('/dashboard', authenticationMiddleware, authorize("admin"), asyncControllerHandler(dashboardController));

@@ -6,6 +6,7 @@ import { getAllCompletedAppointmentsADMINSIDEService } from "./admin.services.js
 import { viewCancelledAppointmentsService } from "./admin.services.js";
 import { viewAdminNotificationsService } from "./admin.services.js";
 import { addWalkinService } from "./admin.services.js";
+import { dashboardService } from "./admin.services.js";
 export async function getAllPendingAppointmentsAdminController(req: Request, res: Response, next: NextFunction){
     try{
         const data = await getAllPendingAppointmentsAdminService();
@@ -83,6 +84,17 @@ export async function addWalkinController(req: Request, res: Response, next: Nex
         res.status(201).json({
             success: true,
             walkinAdded: true
+        });
+    }catch(err){
+        next(err);
+    }
+}
+export async function dashboardController(req: Request, res: Response, next: NextFunction){
+    try{
+        const dashboard = await dashboardService();
+        res.status(200).json({
+            success: true,
+            datas: dashboard
         });
     }catch(err){
         next(err);
