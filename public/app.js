@@ -19,7 +19,7 @@ const notifSound = new Audio("./sounds/notification.wav");
 
 
 
-const socket = io("http://localhost:3000");
+const socket = io("https://eric-s-barbershop-customer-booking-system.onrender.com");
 function establishSocket(){
     socket.on("connect", () => {
        console.log("SOCKET CONNECTED:", socket.id);
@@ -1454,7 +1454,7 @@ function establishSocket(){
        
       
         const popup = window.open(
-        "http://localhost:3000/auth/signup/google",
+        "https://eric-s-barbershop-customer-booking-system.onrender.com/signup/google",
         "googleSignup",
         "width=500,height=600"
        );
@@ -1469,7 +1469,7 @@ function establishSocket(){
 
     window.addEventListener("message", (event) => {
 
-    if (event.origin !== "http://localhost:3000") {
+    if (event.origin !== "https://eric-s-barbershop-customer-booking-system.onrender.com") {
         return;
     }
 
