@@ -84,7 +84,7 @@ export async function accountConfirmationService(username: string, password: str
         });
         const hashedRefreshToken = await bcrypt.hash(refreshToken, 12);
         const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_JWT_SECRET!, {
-        expiresIn: "1m"
+        expiresIn: "15m"
         });
         await insertRefreshToken(hashedRefreshToken, username);
         await insertPassword(username, hashedPassword);
@@ -155,7 +155,7 @@ export async function loginService(username:string, password:string){
         }
 
         const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_JWT_SECRET!, {
-            expiresIn: "1m"
+            expiresIn: "15m"
         });
 
         const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_JWT_SECRET!, {
