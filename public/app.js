@@ -1236,6 +1236,9 @@ function registerSocket() {
        localStorage.setItem("status", "logged-out");
        localStorage.setItem("role", "none");
        console.log("force logout!");
+       adminNav.classList.remove("using");
+       overlay.classList.remove("active");
+       adminDiv.classList.remove("logged-in");
     
    }
 
