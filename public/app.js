@@ -19,57 +19,69 @@ const notifSound = new Audio("./sounds/notification.wav");
 
 
 
-const socket = io("https://eric-s-barbershop-customer-booking-system.onrender.com");
-function establishSocket(){
-    socket.on("connect", () => {
-       console.log("SOCKET CONNECTED:", socket.id);
+const socket = io("https://eric-s-barbershop-customer-booking-system.onrender.com", {
+    withCredentials: true
+});
 
-       const userId = localStorage.getItem("userId");
+socket.on("connect", () => {
+    console.log("SOCKET CONNECTED:", socket.id);
+    registerSocket();
+});
 
-       console.log("USER ID:", userId);
+socket.on("notification", (notification) => {
+    console.log("NOTIFICATION RECEIVED:", notification);
 
-       if (!userId) {
-        console.log(" No userId in localStorage");
+    notifSound.play().catch(err => {
+        console.log("Notification sound blocked:", err);
+    });
+
+    const div = document.createElement("div");
+    div.classList.add("notification");
+
+    const parent = document.querySelector(".body");
+
+    if (!parent) return;
+
+    parent.appendChild(div);
+
+    const h2 = document.createElement("h2");
+    h2.textContent = "You have a new notification check it out!";
+    div.appendChild(h2);
+
+    const p = document.createElement("p");
+    p.textContent = notification.message;
+    div.appendChild(p);
+
+    div.classList.add("go");
+
+    setTimeout(() => {
+        div.remove();
+    }, 4000);
+
+    getUserAppointments();
+});
+
+socket.on("disconnect", (reason) => {
+    console.log("Socket disconnected:", reason);
+});
+
+socket.on("connect_error", (error) => {
+    console.log("Socket connection error:", error.message);
+});
+
+function registerSocket() {
+    const userId = localStorage.getItem("userId");
+
+    console.log("USER ID:", userId);
+
+    if (!userId) {
+        console.log("No userId in localStorage");
         return;
-       }
+    }
 
-       console.log("Sending register:", userId);
+    console.log("Sending register:", userId);
 
-       socket.emit("register", userId);
-       });
-
-      socket.on("notification", (notification) => {
-      notifSound.play();
-      console.log("Notification received!");
-      console.log(notification.message);
-      const div = document.createElement("div");
-      div.classList.add("notification");
-      const parent = document.querySelector(".body");
-      parent.appendChild(div);
-      const h2 = document.createElement("h2");
-      h2.textContent = 'You have a new notification check it out!';
-      div.appendChild(h2);
-      const p = document.createElement("p");
-      p.textContent = notification.message;
-      div.appendChild(p);
-      div.classList.add("go");
-      
-      setTimeout(()=>{
-         div.remove();
-      }, 4000);
-
-      getUserAppointments();
-
-      
-      });
-
-      socket.on("disconnect", (reason) => {
-      console.log("Socket disconnected:", reason);
-      });
-
-      socket.on("connect_error", (error) => {
-      console.log("Socket connection error:", error.message);
-      });
+    socket.emit("register", userId);
 }
 
 
@@ -158,7 +170,7 @@ function establishSocket(){
        userDiv.classList.add("logged-in");
        main.classList.add("logged-in");
        topBookNow.classList.add("hide");
-       establishSocket();
+       registerSocket();
        
       
    }
@@ -207,7 +219,7 @@ function establishSocket(){
          
        });
 
-       establishSocket();
+       registerSocket()
        
    }
 
@@ -1342,7 +1354,7 @@ function establishSocket(){
          topBookNow.classList.add("hide");
          localStorage.setItem("userId", call.userId);
          
-         establishSocket();
+         registerSocket();
 
 
 
@@ -1611,7 +1623,7 @@ function establishSocket(){
 
       localStorage.setItem("userId", login.userId);
       
-      establishSocket();
+      registerSocket();
 
 
       
