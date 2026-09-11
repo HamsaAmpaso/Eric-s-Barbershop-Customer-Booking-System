@@ -52,7 +52,7 @@
 }
 .appointments-container .slot p{
     font-family: var(--font-secondary);
-    font-size: clamp(0.45rem, 1.1vw, 1.1rem);
+    font-size: clamp(0.3rem, 1.1vw, 1.1rem);
     color: var(--black);
     margin: 0;
     font-weight: 500;
