@@ -34,14 +34,15 @@ app.use(express.json());
 app.use(passport.initialize());
 app.use(cookieParser());
 
-const allowedOrigins = [
-  'http://127.0.0.1:5500', // <-- THIS WAS MISSING
-  'http://localhost:5500',
-  'http://127.0.0.1:3000',
-  'http://localhost:3000',
-  'http://127.0.0.1:5173',
-  'http://localhost:5173'
-];
+const allowedOrigins =
+  process.env.NODE_ENV === "production"
+    ? ["https://eric-s-barbershop-customer-booking-system.pages.dev"]
+    : [
+        "http://localhost:5500",
+        "http://127.0.0.1:5500",
+        "http://localhost:5173",
+        "http://127.0.0.1:5173"
+      ];
 
 app.use(cors({
   origin: (origin, callback) => {

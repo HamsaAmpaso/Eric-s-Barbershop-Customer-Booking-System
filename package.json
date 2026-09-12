@@ -18,7 +18,10 @@
   "type": "module",
   "main": "server.ts",
   "scripts": {
-    "test": "node server.ts"
+    "test": "node server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "dev": "tsx watch src/server.ts"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",

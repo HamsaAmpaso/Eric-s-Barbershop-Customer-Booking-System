@@ -438,6 +438,20 @@ footer .bottom #dos{
     
 
 
+    .haircuts .pics #first {
+        background-size: 90%;
+        background-position: center;
+    }
+
+    .haircuts .pics #second {
+        background-size: 85%;
+        background-position: center bottom;
+    }
+
+    .haircuts .pics #third {
+        background-size: 85%;
+        background-position: center;
+    }
 
     
 }
